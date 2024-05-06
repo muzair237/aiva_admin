@@ -1,15 +1,33 @@
 import React, { useEffect, useMemo } from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Row, Col, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import Label from '../../Atoms/Label';
-import generateFormSchema from '../../../helpers/validationSchemas';
 import Input from '../../Atoms/Input';
 import permissionThunk from '../../../slices/permissions/thunk';
 
-export default function PermissionModal({ isOpen, setIsOpen }) {
+export default function PermissionModal({ isOpen, setIsOpen, onCreatePermission }) {
   const dispatch = useDispatch();
   const parents = useSelector(state => state.Permission.parents || []);
+
+  const initialValues = { route: '', can: '', description: '' };
+
+  const validationSchema = Yup.object().shape({
+    route: Yup.string()
+      .required('Route is required')
+      .matches(/^\/[a-zA-Z/_.-]+$/, 'Route can only contain letters, underscores, dots, and must start with a slash.')
+      .max(40, "Route's Maximum Character Length Is 40."),
+    can: Yup.string()
+      .required('Can is required')
+      .matches(/^[a-zA-Z._-]+$/, 'Can can only contain letters, underscores, and dashes.')
+      .max(40, "Can's Maximum Character Length Is 40."),
+    description: Yup.string()
+      .required('Description is required')
+      .max(40, "Description's Maximum Character Length Is 40."),
+    parent: Yup.array().required('Please select at least one parent'),
+    group: Yup.object().required('Please Select Group.'),
+  });
 
   const permissionOptions = useMemo(
     () => [
@@ -18,54 +36,23 @@ export default function PermissionModal({ isOpen, setIsOpen }) {
         value: '$',
       },
       ...parents.map(({ can }) => ({
-        label: can.split('.nav')[0],
+        label: can.split('.nav')[0].charAt(0).toUpperCase() + can.split('.nav')[0].slice(1),
         value: can.split('.nav')[0],
       })),
     ],
     [parents],
   );
 
-  const { initialValues, validationSchema } = generateFormSchema({
-    route: {
-      required: true,
-      patterns: [
-        {
-          pattern: /^\/[a-zA-Z/_.-]+$/,
-          message: 'Route can only contain letters, underscores, dots, and must start with a slash.',
-        },
-        {
-          pattern: /^.{0,40}$/,
-          message: "Route's Maximum Character Length Is 40.",
-        },
-      ],
+  const forOptions = [
+    {
+      label: 'ADMIN',
+      value: 'ADMIN',
     },
-    can: {
-      required: true,
-      patterns: [
-        {
-          pattern: /^[a-zA-Z._-]+$/,
-          message: 'Can can only contain letters,underscores and dashes.',
-        },
-        {
-          pattern: /^.{0,40}$/,
-          message: "Can's Maximum Character Length Is 40.",
-        },
-      ],
+    {
+      label: 'USER',
+      value: 'USER',
     },
-    description: {
-      required: true,
-      patterns: [
-        {
-          pattern: /^.{0,40}$/,
-          message: "Description's Maximum Character Length Is 40.",
-        },
-      ],
-    },
-  });
-
-  const onSubmit = payload => {
-    console.log(payload);
-  };
+  ];
 
   useEffect(() => {
     // if (!permissions?.length > 0)
@@ -77,7 +64,7 @@ export default function PermissionModal({ isOpen, setIsOpen }) {
       <ModalHeader className="bg-light p-3" toggle={() => setIsOpen(false)}>
         Add Permission
       </ModalHeader>
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onCreatePermission}>
         <Form>
           <ModalBody>
             <div className="mb-1">
@@ -96,16 +83,24 @@ export default function PermissionModal({ isOpen, setIsOpen }) {
             </div>
 
             <div className="mb-1">
-              <Label className="form-label">Parent *</Label>
-              <Input
-                name="parent"
-                type="select"
-                options={permissionOptions}
-                isMulti
-                isSearchable
-                hideSelectedOptions={false}
-                closeMenuOnSelect={false}
-              />
+              <Row>
+                <Col>
+                  <Label className="form-label">Parent *</Label>
+                  <Input
+                    name="parent"
+                    type="select"
+                    options={permissionOptions}
+                    isMulti
+                    isSearchable
+                    hideSelectedOptions={false}
+                    closeMenuOnSelect={false}
+                  />
+                </Col>
+                <Col>
+                  <Label className="form-label">Group *</Label>
+                  <Input name="group" type="select" options={forOptions} hideSelectedOptions={false} />
+                </Col>
+              </Row>
             </div>
           </ModalBody>
 

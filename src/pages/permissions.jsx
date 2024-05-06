@@ -10,6 +10,7 @@ import BreadCrumb from '../components/Common/BreadCrumb';
 import permissionThunk from '../slices/permissions/thunk';
 import Button from '../components/Atoms/Button';
 import PermissionModal from '../components/Organisms/PermissionModal';
+import SuccessModal from '../components/Molecules/SuccessModal';
 
 const Permissions = () => {
   const dispatch = useDispatch();
@@ -17,11 +18,14 @@ const Permissions = () => {
   const isLoading = useSelector(state => state.Permission.isLoading || false);
 
   const [permissionModal, setPermissionModal] = useState(false);
+  const [successModal, setSuccessModal] = useState(false);
 
   const [filters, setFilters] = useState({
     page: 1,
     itemsPerPage: 10,
     getAll: false,
+    startDate: '',
+    endDate: '',
     searchText: '',
     sort: 'latest',
     type: '',
@@ -29,6 +33,20 @@ const Permissions = () => {
 
   const setSearchQueryCallback = useCallback(newSearchQuery => {
     setFilters(newSearchQuery);
+  }, []);
+
+  const closeUpFunction = () => {
+    setSuccessModal(true);
+    setPermissionModal(false);
+  };
+
+  const onCreatePermission = useCallback(data => {
+    const payload = {
+      ...data,
+      parent: data.parent.map(ele => ele.value),
+      group: data.group.label,
+    };
+    dispatch(permissionThunk.createPermission({ payload, closeUpFunction }));
   }, []);
 
   useEffect(() => {
@@ -123,7 +141,21 @@ const Permissions = () => {
           </Row>
         </Container>
       </div>
-      {permissionModal && <PermissionModal isOpen={permissionModal} setIsOpen={setPermissionModal} />}
+      {permissionModal && (
+        <PermissionModal
+          isOpen={permissionModal}
+          setIsOpen={setPermissionModal}
+          onCreatePermission={onCreatePermission}
+        />
+      )}
+      {successModal && (
+        <SuccessModal
+          isOpen={successModal}
+          setIsOpen={setSuccessModal}
+          title="Created Successfully!"
+          message="Permission Created Successfully!"
+        />
+      )}
     </>
   );
 };

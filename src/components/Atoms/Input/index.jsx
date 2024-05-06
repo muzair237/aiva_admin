@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Field, ErrorMessage } from 'formik';
+import { Field, useFormikContext, ErrorMessage } from 'formik';
 import TogglePasswordIcon from '../TogglePasswordIcon';
 import { StyledSelect, Error } from './Input.styles';
 
 const Input = ({ name, type, placeholder, options, ...props }) => {
+  const { setFieldValue } = useFormikContext();
   const [passwordShow, setPasswordShow] = useState(false);
 
   return (
@@ -22,7 +23,7 @@ const Input = ({ name, type, placeholder, options, ...props }) => {
       ) : type === 'checkbox' ? (
         <Field name={name} type={type} className="form-check-input" />
       ) : type === 'select' ? (
-        <StyledSelect name={name} options={options} {...props} />
+        <StyledSelect name={name} onChange={e => setFieldValue(name, e)} options={options} {...props} />
       ) : (
         <Field name={name} type={type} className="form-control" placeholder={placeholder} {...props} />
       )}

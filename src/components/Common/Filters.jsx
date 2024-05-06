@@ -1,13 +1,17 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { Row, Col } from 'reactstrap';
 import Select from 'react-select';
+import Flatpickr from 'react-flatpickr';
 import debounce from 'lodash/debounce';
+import { RxCrossCircled } from 'react-icons/rx';
+import Button from '../Atoms/Button';
 
 const PermissionGlobalFilter = ({ setFilters }) => {
   const [searchText, setSearchText] = useState('');
+  const flatpickrRef = useRef(null);
   const debounceRef = useRef(0);
   const [permissionFilter, setPermissionFilter] = useState({ label: 'Latest', value: 'latest' });
-  const [typeFilter, setTypeFilter] = useState();
+  const [typeFilter, setTypeFilter] = useState({ label: 'All', value: 'all' });
 
   const options = [
     { label: 'A - Z', value: 'asc' },
@@ -49,6 +53,7 @@ const PermissionGlobalFilter = ({ setFilters }) => {
     },
     [],
   );
+
   const onChangeTypeFilter = useMemo(
     () => filter => {
       setTypeFilter(filter);
@@ -56,6 +61,39 @@ const PermissionGlobalFilter = ({ setFilters }) => {
         ...prev,
         type: filter.value,
       }));
+    },
+    [],
+  );
+
+  const onChangeDateFilter = useMemo(
+    () => filter => {
+      const [startDate, endDate] = filter;
+      if (startDate && endDate) {
+        setFilters(prev => ({
+          ...prev,
+          startDate,
+          endDate,
+        }));
+      }
+    },
+    [],
+  );
+  const clearFilters = useMemo(
+    () => () => {
+      setSearchText('');
+      setPermissionFilter({ label: 'Latest', value: 'latest' });
+      setTypeFilter({ label: 'All', value: 'all' });
+      flatpickrRef.current.flatpickr.clear();
+      setFilters({
+        page: 1,
+        itemsPerPage: 10,
+        getAll: false,
+        startDate: '',
+        endDate: '',
+        searchText: '',
+        sort: 'latest',
+        type: '',
+      });
     },
     [],
   );
@@ -68,6 +106,7 @@ const PermissionGlobalFilter = ({ setFilters }) => {
             type="text"
             className="form-control form-control-icon search rounded-pill"
             placeholder="Search..."
+            value={searchText}
             onChange={({ target: { value } }) => {
               setSearchText(value);
               onSearchCallText(value.trim());
@@ -76,7 +115,19 @@ const PermissionGlobalFilter = ({ setFilters }) => {
           <i className="bx bx-search-alt search-icon" />
         </div>
       </Col>
-      <Col xl={7}>
+      <Col>
+        <Flatpickr
+          className="form-control"
+          ref={flatpickrRef}
+          options={{
+            mode: 'range',
+            dateFormat: 'Y-m-d',
+            onChange: onChangeDateFilter,
+          }}
+          placeholder="Select Date"
+        />
+      </Col>
+      <Col xl={5}>
         <Row className="g-3">
           <Col sm={4}>
             <div>
@@ -101,6 +152,11 @@ const PermissionGlobalFilter = ({ setFilters }) => {
                 id="idStatus"
               />
             </div>
+          </Col>
+          <Col>
+            <Button onClick={clearFilters} className="btn" color="danger">
+              Clear All Filters <RxCrossCircled size={20} />
+            </Button>
           </Col>
         </Row>
       </Col>

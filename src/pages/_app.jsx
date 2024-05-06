@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
 import { store } from '../slices/store';
 import '../assets/scss/themes.scss';
+import 'animate.css';
 import VerticalLayout from '../layouts';
 import { getCookie } from '../helpers/common';
 
