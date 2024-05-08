@@ -5,6 +5,7 @@ import Flatpickr from 'react-flatpickr';
 import debounce from 'lodash/debounce';
 import { RxCrossCircled } from 'react-icons/rx';
 import Button from '../Atoms/Button';
+import { format } from 'date-fns';
 
 const PermissionGlobalFilter = ({ setFilters }) => {
   const [searchText, setSearchText] = useState('');
@@ -71,13 +72,14 @@ const PermissionGlobalFilter = ({ setFilters }) => {
       if (startDate && endDate) {
         setFilters(prev => ({
           ...prev,
-          startDate,
-          endDate,
+          startDate: format(new Date(startDate), 'yyyy-MM-dd'),
+          endDate: format(new Date(endDate), 'yyyy-MM-dd'),
         }));
       }
     },
     [],
   );
+
   const clearFilters = useMemo(
     () => () => {
       setSearchText('');
@@ -154,7 +156,18 @@ const PermissionGlobalFilter = ({ setFilters }) => {
             </div>
           </Col>
           <Col>
-            <Button onClick={clearFilters} className="btn" color="danger">
+            <Button
+              onClick={clearFilters}
+              className="btn"
+              disabled={
+                !(
+                  searchText ||
+                  permissionFilter.value !== 'latest' ||
+                  typeFilter.value !== 'all' ||
+                  (flatpickrRef.current && flatpickrRef.current.flatpickr.selectedDates.length > 0)
+                )
+              }
+              color="danger">
               Clear All Filters <RxCrossCircled size={20} />
             </Button>
           </Col>

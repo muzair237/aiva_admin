@@ -3,29 +3,38 @@ import { Row, Col, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
+import { useContextHook } from 'use-context-hook';
+import { RefetchContext } from '../../../contexts/refetchContext';
 import Label from '../../Atoms/Label';
 import Input from '../../Atoms/Input';
 import permissionThunk from '../../../slices/permissions/thunk';
+import Button from '../../Atoms/Button';
 
-export default function PermissionModal({ isOpen, setIsOpen, onCreatePermission }) {
+export default function PermissionModal({ permission, isOpen, setIsOpen }) {
   const dispatch = useDispatch();
+
+  const { refetch } = useContextHook(RefetchContext, v => ({
+    refetch: v.refetch,
+  }));
+
+  const isLoading = useSelector(state => state.Permission.isLoading || false);
   const parents = useSelector(state => state.Permission.parents || []);
 
-  const initialValues = { route: '', can: '', description: '' };
+  const initialValues = { route: '', can: '', description: '', parent: null, group: null };
 
   const validationSchema = Yup.object().shape({
     route: Yup.string()
-      .required('Route is required')
+      .required('Please Enter Route!')
       .matches(/^\/[a-zA-Z/_.-]+$/, 'Route can only contain letters, underscores, dots, and must start with a slash.')
       .max(40, "Route's Maximum Character Length Is 40."),
     can: Yup.string()
-      .required('Can is required')
+      .required('Please Enter Can!')
       .matches(/^[a-zA-Z._-]+$/, 'Can can only contain letters, underscores, and dashes.')
       .max(40, "Can's Maximum Character Length Is 40."),
     description: Yup.string()
-      .required('Description is required')
+      .required('Please Enter Description')
       .max(40, "Description's Maximum Character Length Is 40."),
-    parent: Yup.array().required('Please select at least one parent'),
+    parent: Yup.array().min(1, 'Please select at least One Parent'),
     group: Yup.object().required('Please Select Group.'),
   });
 
@@ -43,7 +52,7 @@ export default function PermissionModal({ isOpen, setIsOpen, onCreatePermission 
     [parents],
   );
 
-  const forOptions = [
+  const groupOptions = [
     {
       label: 'ADMIN',
       value: 'ADMIN',
@@ -54,32 +63,49 @@ export default function PermissionModal({ isOpen, setIsOpen, onCreatePermission 
     },
   ];
 
+  const onSubmit = data => {
+    const payload = {
+      ...data,
+      parent: data.parent.map(ele => ele.value),
+      group: data.group.label,
+    };
+    if (!permission) {
+      dispatch(permissionThunk.createPermission({ payload, setIsOpen, refetch }));
+    } else {
+      dispatch(permissionThunk.editPermission({ id: permission?._id, payload, setIsOpen, refetch }));
+    }
+  };
+
   useEffect(() => {
     // if (!permissions?.length > 0)
     dispatch(permissionThunk.getUniqueParents());
   }, []);
-
   return (
     <Modal id="showModal" backdrop="static" isOpen={isOpen} centered>
       <ModalHeader className="bg-light p-3" toggle={() => setIsOpen(false)}>
-        Add Permission
+        {permission ? 'Edit Permission' : 'Add Permission'}
       </ModalHeader>
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onCreatePermission}>
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
         <Form>
           <ModalBody>
             <div className="mb-1">
               <Label className="form-label">Route *</Label>
-              <Input name="route" type="text" placeholder="/route" />
+              <Input name="route" value={permission && permission?.route} type="text" placeholder="/route" />
             </div>
 
             <div className="mb-1">
               <Label className="form-label">Can *</Label>
-              <Input name="can" placeholder="route.nav" type="text" />
+              <Input name="can" value={permission && permission?.can} placeholder="route.nav" type="text" />
             </div>
 
             <div className="mb-1">
               <Label className="form-label">Description *</Label>
-              <Input name="description" type="text" placeholder="Can view the route page" />
+              <Input
+                name="description"
+                value={permission && permission?.description}
+                type="text"
+                placeholder="Can view the route page"
+              />
             </div>
 
             <div className="mb-1">
@@ -89,6 +115,7 @@ export default function PermissionModal({ isOpen, setIsOpen, onCreatePermission 
                   <Input
                     name="parent"
                     type="select"
+                    value={permission && permissionOptions?.filter(({ value }) => permission?.parent?.includes(value))}
                     options={permissionOptions}
                     isMulti
                     isSearchable
@@ -98,7 +125,13 @@ export default function PermissionModal({ isOpen, setIsOpen, onCreatePermission 
                 </Col>
                 <Col>
                   <Label className="form-label">Group *</Label>
-                  <Input name="group" type="select" options={forOptions} hideSelectedOptions={false} />
+                  <Input
+                    name="group"
+                    type="select"
+                    value={permission && groupOptions?.find(option => option?.value === permission?.group)}
+                    options={groupOptions}
+                    hideSelectedOptions={false}
+                  />
                 </Col>
               </Row>
             </div>
@@ -106,9 +139,9 @@ export default function PermissionModal({ isOpen, setIsOpen, onCreatePermission 
 
           <ModalFooter>
             <div className="hstack gap-2 justify-content-end">
-              <button type="submit" className="btn btn-success">
-                Add Permission
-              </button>
+              <Button type="submit" loading={isLoading} className="btn btn-success">
+                {permission ? 'Edit Permission' : 'Create Permission'}
+              </Button>
             </div>
           </ModalFooter>
         </Form>

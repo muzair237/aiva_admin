@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Field, useFormikContext, ErrorMessage } from 'formik';
+import Select from 'react-select';
 import TogglePasswordIcon from '../TogglePasswordIcon';
-import { StyledSelect, Error } from './Input.styles';
+import { Error } from './Input.styles';
 
-const Input = ({ name, type, placeholder, options, ...props }) => {
-  const { setFieldValue } = useFormikContext();
+const Input = ({ name, type, placeholder, value, options, ...props }) => {
+  const { setFieldValue, values } = useFormikContext();
   const [passwordShow, setPasswordShow] = useState(false);
+
+  // Set the value of the field based on the 'value' prop if provided and not controlled by Formik
+  useEffect(() => {
+    if (value !== undefined && !values[name]) {
+      setFieldValue(name, value);
+    }
+  }, [value, name, setFieldValue, values]);
 
   return (
     <>
@@ -23,9 +31,22 @@ const Input = ({ name, type, placeholder, options, ...props }) => {
       ) : type === 'checkbox' ? (
         <Field name={name} type={type} className="form-check-input" />
       ) : type === 'select' ? (
-        <StyledSelect name={name} onChange={e => setFieldValue(name, e)} options={options} {...props} />
+        <Select
+          name={name}
+          onChange={e => setFieldValue(name, e)}
+          options={options}
+          value={values[name] || value} // Use Formik values if available, otherwise use the prop value
+          {...props}
+        />
       ) : (
-        <Field name={name} type={type} className="form-control" placeholder={placeholder} {...props} />
+        <Field
+          name={name}
+          type={type}
+          className="form-control"
+          placeholder={placeholder}
+          value={values[name] || value} // Use Formik values if available, otherwise use the prop value
+          {...props}
+        />
       )}
 
       {/* ErrorMessage component */}

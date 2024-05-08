@@ -69,6 +69,7 @@
     "sass": "^1.71.1",
     "simplebar-react": "^3.2.4",
     "styled-components": "^6.1.8",
+    "use-context-hook": "^2.0.5",
     "yup": "^1.4.0"
   },
   "devDependencies": {

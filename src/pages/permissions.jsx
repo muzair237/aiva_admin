@@ -2,7 +2,9 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Col, Container, Row, Card, CardHeader, UncontrolledTooltip } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { format } from 'date-fns';
-import Link from 'next/link';
+import { MdOutlineModeEdit, MdDeleteOutline } from 'react-icons/md';
+import { useContextHook } from 'use-context-hook';
+import { RefetchContext } from '../contexts/refetchContext';
 import withAuthProtection from '../components/Common/withAuthProtection';
 import { permissionColumns } from '../common/columns';
 import TableContainer from '../components/Common/TableContainer';
@@ -10,16 +12,21 @@ import BreadCrumb from '../components/Common/BreadCrumb';
 import permissionThunk from '../slices/permissions/thunk';
 import Button from '../components/Atoms/Button';
 import PermissionModal from '../components/Organisms/PermissionModal';
-import SuccessModal from '../components/Molecules/SuccessModal';
+import DeleteModal from '../components/Molecules/DeleteModal';
 
 const Permissions = () => {
   const dispatch = useDispatch();
-  const permissions = useSelector(state => state.Permission.permissions || {});
-  const isLoading = useSelector(state => state.Permission.isLoading || false);
+  const { fetch, refetch } = useContextHook(RefetchContext, v => ({
+    fetch: v.fetch,
+    refetch: v.refetch,
+  }));
+  const permissions = useSelector(state => state?.Permission?.permissions || {});
+  const isLoading = useSelector(state => state?.Permission?.isLoading);
 
   const [permissionModal, setPermissionModal] = useState(false);
-  const [successModal, setSuccessModal] = useState(false);
-
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [permission, setPermission] = useState();
+  const [permissionToDelete, setPermissionToDelete] = useState();
   const [filters, setFilters] = useState({
     page: 1,
     itemsPerPage: 10,
@@ -35,40 +42,43 @@ const Permissions = () => {
     setFilters(newSearchQuery);
   }, []);
 
-  const closeUpFunction = () => {
-    setSuccessModal(true);
-    setPermissionModal(false);
+  const deletePermission = () => {
+    dispatch(permissionThunk.deletePermission({ permissionToDelete, setDeleteModal, refetch }));
   };
 
-  const onCreatePermission = useCallback(data => {
-    const payload = {
-      ...data,
-      parent: data.parent.map(ele => ele.value),
-      group: data.group.label,
-    };
-    dispatch(permissionThunk.createPermission({ payload, closeUpFunction }));
-  }, []);
-
   useEffect(() => {
-    // if (!permissions?.length > 0)
     dispatch(permissionThunk.getAllPermissions(filters));
-  }, [filters]);
+  }, [filters, fetch]);
 
-  const actionBtns = () => (
+  const actionBtns = _ => (
     <>
       <div className="d-flex gap-3">
         <div className="edit">
-          <Link className="text-primary d-inline-block edit-item-btn" id="edit" href="#">
-            <i className="ri-pencil-fill fs-16" />
-          </Link>
+          <MdOutlineModeEdit
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              setPermission(_);
+              setPermissionModal(true);
+            }}
+            color="green"
+            size={19}
+            id="edit"
+          />
           <UncontrolledTooltip placement="top" target="edit">
             Edit
           </UncontrolledTooltip>
         </div>
         <div className="remove">
-          <Link type="button" className="text-danger d-inline-block remove-item-btn" id="delete" href="#">
-            <i className="ri-delete-bin-5-fill fs-16" />
-          </Link>
+          <MdDeleteOutline
+            style={{ cursor: 'pointer' }}
+            id="delete"
+            size={19}
+            color="red"
+            onClick={() => {
+              setPermissionToDelete(_?._id);
+              setDeleteModal(true);
+            }}
+          />
           <UncontrolledTooltip placement="top" target="delete">
             Delete
           </UncontrolledTooltip>
@@ -82,7 +92,7 @@ const Permissions = () => {
         format(new Date(_?.createdAt), 'yyyy-MM-dd') || '------------',
         _?.can || '------------',
         _?.description || '------------',
-        _?.for || '------------',
+        _?.group || '------------',
         actionBtns(_),
       ]),
       totalCount: permissions?.totalItems,
@@ -108,15 +118,15 @@ const Permissions = () => {
                     <div className="col-sm-auto">
                       <div>
                         <Button
-                          onClick={() => setPermissionModal(true)}
+                          onClick={() => {
+                            setPermission();
+                            setPermissionModal(true);
+                          }}
                           type="button"
                           className="btn btn-success add-btn"
                           id="create-btn">
-                          <i className="ri-add-line align-bottom me-1" /> Add Permission
+                          <i className="ri-add-line align-bottom me-1" /> Create Permission
                         </Button>{' '}
-                        {/* <button type="button" className="btn btn-primary" onClick={() => setIsExportCSV(true)}>
-                          <i className="ri-file-download-line align-bottom me-1" /> Export
-                        </button> */}
                       </div>
                     </div>
                   </Row>
@@ -142,18 +152,14 @@ const Permissions = () => {
         </Container>
       </div>
       {permissionModal && (
-        <PermissionModal
-          isOpen={permissionModal}
-          setIsOpen={setPermissionModal}
-          onCreatePermission={onCreatePermission}
-        />
+        <PermissionModal permission={permission} isOpen={permissionModal} setIsOpen={setPermissionModal} />
       )}
-      {successModal && (
-        <SuccessModal
-          isOpen={successModal}
-          setIsOpen={setSuccessModal}
-          title="Created Successfully!"
-          message="Permission Created Successfully!"
+      {deleteModal && (
+        <DeleteModal
+          isOpen={deleteModal}
+          setIsOpen={setDeleteModal}
+          handleClick={deletePermission}
+          message="Are you sure you Want to Delete this Permission?"
         />
       )}
     </>

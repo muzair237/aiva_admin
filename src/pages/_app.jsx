@@ -6,15 +6,18 @@ import '../assets/scss/themes.scss';
 import 'animate.css';
 import VerticalLayout from '../layouts';
 import { getCookie } from '../helpers/common';
+import RefectContextProvider from '../contexts/refetchContext';
 
 export default function App({ Component, pageProps }) {
   const allowedPages = JSON.parse(getCookie(process.env.NEXT_PUBLIC_ADMIN_ALLOWED_PAGES_COOKIE));
   return (
     <Provider store={store}>
       {allowedPages ? (
-        <VerticalLayout>
-          <Component {...pageProps} />
-        </VerticalLayout>
+        <RefectContextProvider>
+          <VerticalLayout>
+            <Component {...pageProps} />
+          </VerticalLayout>
+        </RefectContextProvider>
       ) : (
         <Component {...pageProps} />
       )}
