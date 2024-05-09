@@ -11,6 +11,7 @@ const TableContainer = ({
   isGlobalFilter,
   isLoading,
   isPermissionFilter,
+  isRoleFilter,
   currentPage,
   totalCount,
   itemsPerPage,
@@ -18,7 +19,10 @@ const TableContainer = ({
 }) => (
   <>
     <Row className="mb-3">
-      {isGlobalFilter && <GlobalFilter isPermissionFilter={isPermissionFilter} setFilters={setFilters} />}
+      {isGlobalFilter && isPermissionFilter && (
+        <GlobalFilter isPermissionFilter={isPermissionFilter} setFilters={setFilters} />
+      )}
+      {isGlobalFilter && isRoleFilter && <GlobalFilter isRoleFilter={isRoleFilter} setFilters={setFilters} />}
     </Row>
     <div className="table-responsive table-card mt-3 mb-1">
       <table className="table align-middle" id="Table">

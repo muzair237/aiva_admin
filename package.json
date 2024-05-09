@@ -43,7 +43,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.1",
     "animate.css": "^4.1.1",
-    "bootstrap": "^5.2.3",
+    "bootstrap": "5.2.3",
     "date-fns": "^3.6.0",
     "env-cmd": "^10.1.0",
     "formik": "^2.4.5",
