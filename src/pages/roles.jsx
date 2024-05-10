@@ -26,7 +26,7 @@ const Roles = () => {
   const [roleModal, setRoleModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [role, setRole] = useState();
-  const [permissionToDelete, setPermissionToDelete] = useState();
+  const [roleToDelete, setRoleToDelete] = useState();
   const [filters, setFilters] = useState({
     page: 1,
     itemsPerPage: 10,
@@ -42,7 +42,7 @@ const Roles = () => {
   }, []);
 
   const deletePermission = () => {
-    dispatch(permissionThunk.deletePermission({ permissionToDelete, setDeleteModal, refetch }));
+    dispatch(roleThunk.deleteRole({ roleToDelete, setDeleteModal, refetch }));
   };
 
   useEffect(() => {
@@ -74,7 +74,7 @@ const Roles = () => {
             size={19}
             color="red"
             onClick={() => {
-              setPermissionToDelete(_?._id);
+              setRoleToDelete(_?._id);
               setDeleteModal(true);
             }}
           />

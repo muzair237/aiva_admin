@@ -16,6 +16,7 @@ export default function RoleModal({ role, isOpen, setIsOpen }) {
   const permissions = useSelector(state => state?.Role?.permissions || []);
 
   const [customizePermission, setCustomizePermission] = useState(false);
+  const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
 
   const { refetch } = useContextHook(RefetchContext, v => ({
@@ -23,9 +24,8 @@ export default function RoleModal({ role, isOpen, setIsOpen }) {
   }));
 
   const isLoading = useSelector(state => state.Permission.isLoading || false);
-  //   const parents = useSelector(state => state.Permission.parents || []);
 
-  const initialValues = { route: '', can: '', description: '', parent: null, group: null };
+  const initialValues = { type: '', description: '' };
 
   const validationSchema = Yup.object().shape({
     type: Yup.string()
@@ -50,20 +50,17 @@ export default function RoleModal({ role, isOpen, setIsOpen }) {
         }),
     [permissions],
   );
-  console.log(tabs);
-
   const onSubmit = data => {
-    console.log(data);
-    // const payload = {
-    //   ...data,
-    //   parent: data.parent.map(ele => ele.value),
-    //   group: data.group.label,
-    // };
-    // if (!permission) {
-    //   dispatch(permissionThunk.createPermission({ payload, setIsOpen, refetch }));
-    // } else {
-    //   dispatch(permissionThunk.editPermission({ id: permission?._id, payload, setIsOpen, refetch }));
-    // }
+    const payload = {
+      ...data,
+      permissions: selectedPermissions,
+    };
+    console.log(payload);
+    if (!role) {
+      dispatch(roleThunk.createRole({ payload, setIsOpen, refetch }));
+    } else {
+      dispatch(permissionThunk.editPermission({ id: permission?._id, payload, setIsOpen, refetch }));
+    }
   };
 
   useEffect(() => {
@@ -111,7 +108,11 @@ export default function RoleModal({ role, isOpen, setIsOpen }) {
 
             <ModalFooter>
               <div className="hstack gap-2 justify-content-end">
-                <Button type="submit" loading={isLoading} className="btn btn-success">
+                <Button
+                  type="submit"
+                  disabled={!selectedPermissions?.length}
+                  loading={isLoading}
+                  className="btn btn-success">
                   {role ? 'Edit Role' : 'Create Role'}
                 </Button>
               </div>
@@ -123,6 +124,8 @@ export default function RoleModal({ role, isOpen, setIsOpen }) {
         <CustomizePermissionModal
           isEdit={isEdit}
           tabs={tabs}
+          selected={selectedPermissions}
+          setPermissions={setSelectedPermissions}
           permissions={permissions}
           isOpen={customizePermission}
           setIsOpen={setCustomizePermission}

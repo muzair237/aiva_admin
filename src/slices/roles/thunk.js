@@ -42,7 +42,6 @@ const roleThunk = {
       let res = await Fetch.get(`${roleThunk.url}/${GET_PERMISSIONS}`);
       if (res.status >= 200 && res.status < 300) {
         res = await res.json();
-        console.log(res);
         return res?.permissions;
       }
       const { message } = await res.json();
@@ -56,7 +55,7 @@ const roleThunk = {
     }
   }),
 
-  createPermission: createAsyncThunk('permission/addPermission', async ({ payload, setIsOpen, refetch }) => {
+  createRole: createAsyncThunk('role/createRole', async ({ payload, setIsOpen, refetch }) => {
     try {
       let res = await Fetch.post(`${roleThunk.url}/${CREATE_ROLE}`, payload);
       if (res.status >= 200 && res.status < 300) {
@@ -65,7 +64,7 @@ const roleThunk = {
         setIsOpen(prev => !prev);
         Toast({
           type: 'success',
-          message: 'Permission Created Successfully!',
+          message: 'Role Created Successfully!',
         });
         return res;
       }
@@ -104,32 +103,29 @@ const roleThunk = {
     }
   }),
 
-  deletePermission: createAsyncThunk(
-    'permission/deletePermission',
-    async ({ permissionToDelete, setDeleteModal, refetch }) => {
-      try {
-        let res = await Fetch.delete(`${roleThunk.url}/${DELETE_ROLE}/${permissionToDelete}`);
-        if (res.status >= 200 && res.status < 300) {
-          res = await res.json();
-          refetch(prev => !prev);
-          setDeleteModal(false);
-          Toast({
-            type: 'success',
-            message: 'Permission Deleted Successfully!',
-          });
-          return res;
-        }
-        const { message } = await res.json();
-        throw new Error(message ?? 'Something Went Wrong');
-      } catch ({ message }) {
+  deleteRole: createAsyncThunk('role/deleteRole', async ({ roleToDelete, setDeleteModal, refetch }) => {
+    try {
+      let res = await Fetch.delete(`${roleThunk.url}/${DELETE_ROLE}/${roleToDelete}`);
+      if (res.status >= 200 && res.status < 300) {
+        res = await res.json();
+        refetch(prev => !prev);
+        setDeleteModal(false);
         Toast({
-          type: 'error',
-          message,
+          type: 'success',
+          message: 'Role Deleted Successfully!',
         });
-        throw message;
+        return res;
       }
-    },
-  ),
+      const { message } = await res.json();
+      throw new Error(message ?? 'Something Went Wrong');
+    } catch ({ message }) {
+      Toast({
+        type: 'error',
+        message,
+      });
+      throw message;
+    }
+  }),
 };
 
 export default roleThunk;

@@ -35,28 +35,28 @@ const roleSlice = createSlice({
         state.errorMsg = action?.error?.message;
       })
 
-      // CREATE PERMISSION
-      .addCase(roleThunk.createPermission.pending, state => {
+      // CREATE ROLE
+      .addCase(roleThunk.createRole.pending, state => {
         state.isLoading = true;
       })
-      .addCase(roleThunk.createPermission.fulfilled, (state, action) => {
+      .addCase(roleThunk.createRole.fulfilled, state => {
         state.isLoading = false;
       })
 
-      .addCase(roleThunk.createPermission.rejected, (state, action) => {
+      .addCase(roleThunk.createRole.rejected, (state, action) => {
         state.errorMsg = action?.error?.message;
         state.isLoading = false;
       })
 
-      // DELETE PERMISSION
-      .addCase(roleThunk.deletePermission.pending, state => {
+      // DELETE ROLE
+      .addCase(roleThunk.deleteRole.pending, state => {
         state.isLoading = true;
       })
-      .addCase(roleThunk.deletePermission.fulfilled, (state, action) => {
+      .addCase(roleThunk.deleteRole.fulfilled, state => {
         state.isLoading = false;
       })
 
-      .addCase(roleThunk.deletePermission.rejected, (state, action) => {
+      .addCase(roleThunk.deleteRole.rejected, (state, action) => {
         state.errorMsg = action?.error?.message;
         state.isLoading = false;
       });
