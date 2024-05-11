@@ -31,6 +31,9 @@ export default function Pagination({ setFilters, currentPage, totalCount, itemsP
           type="number"
           min={1}
           style={{ width: 70 }}
+          disabled={
+            currentPage === Math.ceil(totalCount / itemsPerPage) || currentPage > Math.ceil(totalCount / itemsPerPage)
+          }
           max={Math.ceil(totalCount / itemsPerPage)}
           defaultValue={currentPage}
           onChange={e => setFilters(prev => ({ ...prev, page: e.target.value }))}

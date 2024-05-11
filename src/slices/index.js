@@ -12,11 +12,15 @@ import permissionReducer from './permissions/reducer';
 // Role
 import roleReducer from './roles/reducer';
 
+// Admin
+import adminReducer from './admins/reducer';
+
 const rootReducer = combineReducers({
   Layout: LayoutReducer,
   Auth: AuthReducer,
   Permission: permissionReducer,
   Role: roleReducer,
+  Admin: adminReducer,
 });
 
 export default rootReducer;

@@ -44,7 +44,7 @@ const permissionSlice = createSlice({
       .addCase(permissionThunk.createPermission.pending, state => {
         state.isLoading = true;
       })
-      .addCase(permissionThunk.createPermission.fulfilled, (state, action) => {
+      .addCase(permissionThunk.createPermission.fulfilled, state => {
         state.isLoading = false;
       })
 
@@ -53,11 +53,24 @@ const permissionSlice = createSlice({
         state.isLoading = false;
       })
 
+      // EDIT PERMISSION
+      .addCase(permissionThunk.editPermission.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(permissionThunk.editPermission.fulfilled, state => {
+        state.isLoading = false;
+      })
+
+      .addCase(permissionThunk.editPermission.rejected, (state, action) => {
+        state.errorMsg = action?.error?.message;
+        state.isLoading = false;
+      })
+
       // DELETE PERMISSION
       .addCase(permissionThunk.deletePermission.pending, state => {
         state.isLoading = true;
       })
-      .addCase(permissionThunk.deletePermission.fulfilled, (state, action) => {
+      .addCase(permissionThunk.deletePermission.fulfilled, state => {
         state.isLoading = false;
       })
 

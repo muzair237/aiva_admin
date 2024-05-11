@@ -4,17 +4,19 @@ import Select from 'react-select';
 import TogglePasswordIcon from '../TogglePasswordIcon';
 import { Error } from './Input.styles';
 
-const Input = ({ name, type, placeholder, value, options, ...props }) => {
+const Input = ({ name, type, placeholder, value, defaultValue, options, ...props }) => {
   const { setFieldValue, values } = useFormikContext();
   const [passwordShow, setPasswordShow] = useState(false);
 
   // Set the value of the field based on the 'value' prop if provided and not controlled by Formik
   useEffect(() => {
-    if (value !== undefined && !values[name]) {
+    if (defaultValue && defaultValue !== undefined) {
+      setFieldValue(name, defaultValue);
+    } else if (value !== undefined && !values[name]) {
       setFieldValue(name, value);
     }
-  }, [value, name, setFieldValue, values]);
-
+  }, []);
+  console.log(values);
   return (
     <>
       {type === 'password' ? (
@@ -33,9 +35,10 @@ const Input = ({ name, type, placeholder, value, options, ...props }) => {
       ) : type === 'select' ? (
         <Select
           name={name}
-          onChange={e => setFieldValue(name, e)}
+          onChange={selectedOption => setFieldValue(name, selectedOption)}
           options={options}
-          value={values[name] || value} // Use Formik values if available, otherwise use the prop value
+          // defaultValue={defaultValue}
+          value={values[name] || value || defaultValue} // Use Formik values if available, otherwise use the prop value
           {...props}
         />
       ) : (

@@ -80,13 +80,10 @@ const CustomizePermissionModal = ({ isEdit, tabs, selected, setPermissions, perm
             <div className="form-check form-switch form-check-right">
               <Input
                 className="form-check-input"
-                // checked={
-                //   selectedPermissions.every(permission => permission.includes(permission.can)) &&
-                //   filteredPermissions?.length > 0
-                // }
                 checked={
                   permissions.every(permission => selectedPermissions.includes(permission.can)) && rightTabs?.length > 0
                 }
+                disabled={!rightTabs?.length}
                 onChange={({ target: { checked } }) => {
                   const allPermissions = permissions.map(permission => permission.can);
                   setSelectedPermissions(checked ? allPermissions : []);
@@ -108,29 +105,34 @@ const CustomizePermissionModal = ({ isEdit, tabs, selected, setPermissions, perm
                   {/* // Sidebar */}
                   <Col lg={3} style={{ maxHeight: '480px', overflowY: 'auto' }}>
                     <Nav tabs className="flex-column nav nav-tabs nav-tabs-custom nav-primary">
-                      {rightTabs.map(item => (
-                        <NavItem key={item?.value}>
-                          <NavLink
-                            style={{ cursor: 'pointer' }}
-                            className={classnames({
-                              'mb-2': true,
-                              active: verticalTab === item.value,
-                            })}
-                            onClick={() => {
-                              setVerticalTab(() => {
-                                const newVerticalTab = item.value;
-                                const selectedTabsPermissions = permissions.filter(
-                                  ele => ele?.parent?.includes(newVerticalTab) || ele?.can === `${newVerticalTab}.nav`,
-                                );
-                                setfilteredPermissions(selectedTabsPermissions);
-                                return newVerticalTab;
-                              });
-                            }}
-                            id={`v-pills-${item.value}-tab`}>
-                            {item.label}
-                          </NavLink>
-                        </NavItem>
-                      ))}
+                      {rightTabs && rightTabs?.length > 0 ? (
+                        rightTabs.map(item => (
+                          <NavItem key={item?.value}>
+                            <NavLink
+                              style={{ cursor: 'pointer' }}
+                              className={classnames({
+                                'mb-2': true,
+                                active: verticalTab === item.value,
+                              })}
+                              onClick={() => {
+                                setVerticalTab(() => {
+                                  const newVerticalTab = item.value;
+                                  const selectedTabsPermissions = permissions.filter(
+                                    ele =>
+                                      ele?.parent?.includes(newVerticalTab) || ele?.can === `${newVerticalTab}.nav`,
+                                  );
+                                  setfilteredPermissions(selectedTabsPermissions);
+                                  return newVerticalTab;
+                                });
+                              }}
+                              id={`v-pills-${item.value}-tab`}>
+                              {item.label}
+                            </NavLink>
+                          </NavItem>
+                        ))
+                      ) : (
+                        <Label>No Permissions Group Found!</Label>
+                      )}
                     </Nav>
                   </Col>
 
@@ -150,6 +152,7 @@ const CustomizePermissionModal = ({ isEdit, tabs, selected, setPermissions, perm
                                     selectedPermissions.includes(permission.can),
                                   ) && filteredPermissions?.length > 0
                                 }
+                                disabled={!rightTabs?.length}
                                 onChange={e => {
                                   const isChecked = e.target.checked;
                                   const currentTabPermissions = filteredPermissions.map(permission => permission.can);
@@ -195,6 +198,7 @@ const CustomizePermissionModal = ({ isEdit, tabs, selected, setPermissions, perm
                                   );
                                 }
                               }}
+                              disabled={!rightTabs?.length}
                               value={searchTabPermission}
                               className="form-control search"
                               placeholder="Search permissions"
@@ -213,13 +217,14 @@ const CustomizePermissionModal = ({ isEdit, tabs, selected, setPermissions, perm
                               listStyle: 'none',
                               columnGap: '35px',
                             }}>
-                            {filteredPermissions.map((item, key) => (
-                              <li key={key}>
-                                <>
-                                  <div className="form-check  mb-3">
+                            {filteredPermissions &&
+                              filteredPermissions.length > 0 &&
+                              filteredPermissions.map((item, index) => (
+                                <li key={index}>
+                                  <div className="form-check mb-3">
                                     <Input
                                       className="form-check-input"
-                                      checked={selectedPermissions.find(ele => ele === item?.can)}
+                                      checked={selectedPermissions.includes(item?.can)}
                                       onChange={() => {
                                         if (selectedPermissions.includes(item.can)) {
                                           setSelectedPermissions(prev =>
@@ -231,13 +236,12 @@ const CustomizePermissionModal = ({ isEdit, tabs, selected, setPermissions, perm
                                       }}
                                       type="checkbox"
                                     />
-                                    <Label className="form-check-label" for="formCheck13">
+                                    <Label className="form-check-label" htmlFor={`checkbox-${index}`}>
                                       {item.can}
                                     </Label>
                                   </div>
-                                </>
-                              </li>
-                            ))}
+                                </li>
+                              ))}
                           </ul>
                         </Row>
                       </TabContent>

@@ -20,7 +20,7 @@ export default function PermissionModal({ permission, isOpen, setIsOpen }) {
   const isLoading = useSelector(state => state.Permission.isLoading || false);
   const parents = useSelector(state => state.Permission.parents || []);
 
-  const initialValues = { route: '', can: '', description: '', parent: null, group: null };
+  const initialValues = { route: '', can: '', description: '', parent: [], group: null };
 
   const validationSchema = Yup.object().shape({
     route: Yup.string()
@@ -115,7 +115,9 @@ export default function PermissionModal({ permission, isOpen, setIsOpen }) {
                   <Input
                     name="parent"
                     type="select"
-                    value={permission && permissionOptions?.filter(({ value }) => permission?.parent?.includes(value))}
+                    defaultValue={
+                      permission && permissionOptions?.filter(({ value }) => permission?.parent?.includes(value))
+                    }
                     options={permissionOptions}
                     isMulti
                     isSearchable

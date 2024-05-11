@@ -48,6 +48,19 @@ const roleSlice = createSlice({
         state.isLoading = false;
       })
 
+      // EDIT ROLE
+      .addCase(roleThunk.editRole.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(roleThunk.editRole.fulfilled, state => {
+        state.isLoading = false;
+      })
+
+      .addCase(roleThunk.editRole.rejected, (state, action) => {
+        state.errorMsg = action?.error?.message;
+        state.isLoading = false;
+      })
+
       // DELETE ROLE
       .addCase(roleThunk.deleteRole.pending, state => {
         state.isLoading = true;

@@ -6,27 +6,28 @@ import { MdOutlineModeEdit, MdDeleteOutline } from 'react-icons/md';
 import { useContextHook } from 'use-context-hook';
 import { RefetchContext } from '../contexts/refetchContext';
 import withAuthProtection from '../components/Common/withAuthProtection';
-import { roleColumns } from '../common/columns';
+import { adminColumns } from '../common/columns';
 import TableContainer from '../components/Common/TableContainer';
 import BreadCrumb from '../components/Common/BreadCrumb';
-import roleThunk from '../slices/roles/thunk';
+import adminThunk from '../slices/admins/thunk';
 import Button from '../components/Atoms/Button';
-import RoleModal from '../components/Organisms/RoleModal';
+import AdminModal from '../components/Organisms/AdminModal';
 import DeleteModal from '../components/Molecules/DeleteModal';
 
-const Roles = () => {
+const Admins = () => {
   const dispatch = useDispatch();
   const { fetch, refetch } = useContextHook(RefetchContext, v => ({
     fetch: v.fetch,
     refetch: v.refetch,
   }));
-  const roles = useSelector(state => state?.Role?.roles || {});
-  const isLoading = useSelector(state => state?.Role?.isLoading);
+  const admins = useSelector(state => state?.Admin?.admins || {});
+  const uniqueRoles = useSelector(state => state?.Admin?.roles || []);
+  const isLoading = useSelector(state => state?.Admin?.isLoading);
 
-  const [roleModal, setRoleModal] = useState(false);
+  const [adminModal, setAdminModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [role, setRole] = useState();
-  const [roleToDelete, setRoleToDelete] = useState();
+  const [admin, setAdmin] = useState();
+  const [adminToDelete, setAdminToDelete] = useState();
   const [filters, setFilters] = useState({
     page: 1,
     itemsPerPage: 10,
@@ -35,19 +36,24 @@ const Roles = () => {
     endDate: '',
     searchText: '',
     sort: 'latest',
+    type: '',
   });
 
   const setSearchQueryCallback = useCallback(newSearchQuery => {
     setFilters(newSearchQuery);
   }, []);
 
-  const deleteRole = () => {
-    dispatch(roleThunk.deleteRole({ roleToDelete, setDeleteModal, refetch }));
+  const deleteAdmin = () => {
+    dispatch(adminThunk.deleteAdmin({ adminToDelete, setDeleteModal, refetch }));
   };
 
   useEffect(() => {
-    dispatch(roleThunk.getAllRoles(filters));
+    dispatch(adminThunk.getAllAdmins(filters));
   }, [filters, fetch]);
+
+  useEffect(() => {
+    dispatch(adminThunk.getUniqueRoles());
+  }, []);
 
   const actionBtns = _ => (
     <>
@@ -56,8 +62,8 @@ const Roles = () => {
           <MdOutlineModeEdit
             style={{ cursor: 'pointer' }}
             onClick={() => {
-              setRole(_);
-              setRoleModal(true);
+              setAdmin(_);
+              setAdminModal(true);
             }}
             color="green"
             size={19}
@@ -74,7 +80,7 @@ const Roles = () => {
             size={19}
             color="red"
             onClick={() => {
-              setRoleToDelete(_?._id);
+              setAdminToDelete(_?._id);
               setDeleteModal(true);
             }}
           />
@@ -85,24 +91,25 @@ const Roles = () => {
       </div>
     </>
   );
-  const { role_rows, totalCount } = useMemo(
+  const { admin_rows, totalCount } = useMemo(
     () => ({
-      role_rows: roles?.items?.map(_ => [
+      admin_rows: admins?.items?.map(_ => [
         format(new Date(_?.createdAt), 'yyyy-MM-dd') || '------------',
-        _?.type || '------------',
-        _?.description || '------------',
+        _?.name || '------------',
+        _?.email || '------------',
+        _?.roles?.length > 0 ? _.roles.map(__ => __.type).join(', ') : '------------',
         actionBtns(_),
       ]),
-      totalCount: roles?.totalItems,
+      totalCount: admins?.totalItems,
     }),
-    [roles?.items],
+    [admins?.items],
   );
 
   return (
     <>
       <div className="page-content">
         <Container fluid>
-          <BreadCrumb title="Roles" />
+          <BreadCrumb title="Admins" />
           <Row>
             <Col lg={12}>
               <Card id="roleList">
@@ -110,20 +117,20 @@ const Roles = () => {
                   <Row className="g-4 align-items-center">
                     <div className="col-sm">
                       <div>
-                        <h5 className="card-title mb-0 fw-semibold">Role List</h5>
+                        <h5 className="card-title mb-0 fw-semibold">Admin List</h5>
                       </div>
                     </div>
                     <div className="col-sm-auto">
                       <div>
                         <Button
                           onClick={() => {
-                            setRole();
-                            setRoleModal(true);
+                            setAdmin();
+                            setAdminModal(true);
                           }}
                           type="button"
                           className="btn btn-success add-btn"
                           id="create-btn">
-                          <i className="ri-add-line align-bottom me-1" /> Create Role
+                          <i className="ri-add-line align-bottom me-1" /> Create Admin
                         </Button>{' '}
                       </div>
                     </div>
@@ -132,14 +139,15 @@ const Roles = () => {
                 <div className="card-body pt-0">
                   <div>
                     <TableContainer
-                      columns={roleColumns}
-                      data={role_rows || []}
+                      columns={adminColumns}
+                      data={admin_rows || []}
                       isGlobalFilter
                       isLoading={isLoading}
-                      isRoleFilter
+                      isAdminFilter
                       currentPage={filters?.page}
                       totalCount={totalCount}
                       itemsPerPage={filters?.itemsPerPage}
+                      uniqueRoles={uniqueRoles}
                       setFilters={setSearchQueryCallback}
                     />
                   </div>
@@ -149,17 +157,19 @@ const Roles = () => {
           </Row>
         </Container>
       </div>
-      {roleModal && <RoleModal role={role} isOpen={roleModal} setIsOpen={setRoleModal} />}
+      {adminModal && (
+        <AdminModal admin={admin} uniqueRoles={uniqueRoles} isOpen={adminModal} setIsOpen={setAdminModal} />
+      )}
       {deleteModal && (
         <DeleteModal
           isOpen={deleteModal}
           setIsOpen={setDeleteModal}
-          handleClick={deleteRole}
-          message="Are you sure you Want to Delete this Role?"
+          handleClick={deleteAdmin}
+          message="Are you sure you Want to Delete this Admin?"
         />
       )}
     </>
   );
 };
 
-export default withAuthProtection(Roles);
+export default withAuthProtection(Admins);

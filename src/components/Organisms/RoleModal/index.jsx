@@ -23,10 +23,9 @@ export default function RoleModal({ role, isOpen, setIsOpen }) {
     refetch: v.refetch,
   }));
 
-  const isLoading = useSelector(state => state.Permission.isLoading || false);
+  const isLoading = useSelector(state => state.Role.isLoading || false);
 
   const initialValues = { type: '', description: '' };
-
   const validationSchema = Yup.object().shape({
     type: Yup.string()
       .required('Please Enter Type!')
@@ -55,11 +54,10 @@ export default function RoleModal({ role, isOpen, setIsOpen }) {
       ...data,
       permissions: selectedPermissions,
     };
-    console.log(payload);
     if (!role) {
       dispatch(roleThunk.createRole({ payload, setIsOpen, refetch }));
     } else {
-      dispatch(permissionThunk.editPermission({ id: permission?._id, payload, setIsOpen, refetch }));
+      dispatch(roleThunk.editRole({ id: role?._id, payload, setIsOpen, refetch }));
     }
   };
 
@@ -67,6 +65,14 @@ export default function RoleModal({ role, isOpen, setIsOpen }) {
     dispatch(roleThunk.getUniqueParents());
     if (role) setIsEdit(true);
   }, []);
+
+  useEffect(() => {
+    if (role && role.permissions && permissions) {
+      const perms = permissions?.filter(permission => role.permissions.includes(permission._id))?.map(({ can }) => can);
+      setSelectedPermissions(perms);
+    }
+  }, [role, permissions]);
+
   return (
     <>
       <Modal id="showModal" backdrop="static" isOpen={isOpen} centered>
@@ -79,19 +85,13 @@ export default function RoleModal({ role, isOpen, setIsOpen }) {
               <Row>
                 <Col>
                   <Label className="form-label">Type *</Label>
-                  <Input
-                    name="type"
-                    //    value={permission && permission?.route}
-                    type="text"
-                    placeholder="USER"
-                  />
+                  <Input name="type" value={role && role?.type} type="text" placeholder="USER" />
                 </Col>
                 <Col>
                   <Label className="form-label">Description *</Label>
                   <Input
                     name="description"
-                    // value={permission && permission?.description}
-
+                    value={role && role?.description}
                     type="text"
                     placeholder="Role for a User"
                   />
