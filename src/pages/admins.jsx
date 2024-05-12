@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import Head from 'next/head';
 import { Col, Container, Row, Card, CardHeader, UncontrolledTooltip } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { format } from 'date-fns';
 import { MdOutlineModeEdit, MdDeleteOutline } from 'react-icons/md';
+import { GrUpdate } from 'react-icons/gr';
 import { useContextHook } from 'use-context-hook';
 import { RefetchContext } from '../contexts/refetchContext';
 import withAuthProtection from '../components/Common/withAuthProtection';
@@ -12,6 +14,7 @@ import BreadCrumb from '../components/Common/BreadCrumb';
 import adminThunk from '../slices/admins/thunk';
 import Button from '../components/Atoms/Button';
 import AdminModal from '../components/Organisms/AdminModal';
+import UpdatePasswordModal from '../components/Organisms/UpdatePassword';
 import DeleteModal from '../components/Molecules/DeleteModal';
 
 const Admins = () => {
@@ -25,6 +28,7 @@ const Admins = () => {
   const isLoading = useSelector(state => state?.Admin?.isLoading);
 
   const [adminModal, setAdminModal] = useState(false);
+  const [updatePasswordModal, setUpdatePasswordModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [admin, setAdmin] = useState();
   const [adminToDelete, setAdminToDelete] = useState();
@@ -73,6 +77,21 @@ const Admins = () => {
             Edit
           </UncontrolledTooltip>
         </div>
+        <div className="update-password">
+          <GrUpdate
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              setAdmin(_?._id);
+              setUpdatePasswordModal(true);
+            }}
+            color="blue"
+            size={15}
+            id="update-password"
+          />
+          <UncontrolledTooltip placement="top" target="update-password">
+            Update Password
+          </UncontrolledTooltip>
+        </div>
         <div className="remove">
           <MdDeleteOutline
             style={{ cursor: 'pointer' }}
@@ -107,6 +126,10 @@ const Admins = () => {
 
   return (
     <>
+      <Head>
+        <title>AIVA | Admins</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className="page-content">
         <Container fluid>
           <BreadCrumb title="Admins" />
@@ -159,6 +182,9 @@ const Admins = () => {
       </div>
       {adminModal && (
         <AdminModal admin={admin} uniqueRoles={uniqueRoles} isOpen={adminModal} setIsOpen={setAdminModal} />
+      )}
+      {updatePasswordModal && (
+        <UpdatePasswordModal adminId={admin} isOpen={updatePasswordModal} setIsOpen={setUpdatePasswordModal} />
       )}
       {deleteModal && (
         <DeleteModal

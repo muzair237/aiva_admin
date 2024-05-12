@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head';
 import { Card, Col, Container, Row } from 'reactstrap';
 import { Formik, Form } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,6 +28,10 @@ const Login = () => {
   };
   return (
     <>
+      <Head>
+        <title>AIVA | Login</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className="auth-page-wrapper auth-bg-cover py-4 d-flex justify-content-center align-items-center min-vh-100">
         <div className="auth-page-content overflow-hidden pt-lg-5">
           <Container>
@@ -59,7 +64,12 @@ const Login = () => {
                                 <Label htmlFor="auth-remember-check">Remember me</Label>
                               </div>
                               <div className="mt-4 mb-5">
-                                <Button color="primary" loading={isLoading} className="w-100" type="submit">
+                                <Button
+                                  color="primary"
+                                  disabled={isLoading}
+                                  loading={isLoading}
+                                  className="w-100"
+                                  type="submit">
                                   Sign In
                                 </Button>
                               </div>

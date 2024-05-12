@@ -14,6 +14,7 @@ import CustomizePermissionModal from '../CustomizePermissionModal';
 export default function RoleModal({ role, isOpen, setIsOpen }) {
   const dispatch = useDispatch();
   const permissions = useSelector(state => state?.Role?.permissions || []);
+  const isLoading = useSelector(state => state.Role.isLoading || false);
 
   const [customizePermission, setCustomizePermission] = useState(false);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
@@ -23,7 +24,6 @@ export default function RoleModal({ role, isOpen, setIsOpen }) {
     refetch: v.refetch,
   }));
 
-  const isLoading = useSelector(state => state.Role.isLoading || false);
 
   const initialValues = { type: '', description: '' };
   const validationSchema = Yup.object().shape({

@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import debounce from 'lodash/debounce';
 import { Row, Col, Input } from 'reactstrap';
 import Button from '../../Atoms/Button';
 
 export default function Pagination({ setFilters, currentPage, totalCount, itemsPerPage }) {
+  const debounceRef = useRef(0);
+  const onChangePageNumber = debounce(value => {
+    debounceRef.current += 1;
+    const LocalRef = debounceRef.current;
+    setTimeout(() => {
+      if (LocalRef === debounceRef.current) {
+        setFilters(prev => ({ ...prev, page: value }));
+      }
+    }, 1);
+  }, 300);
+
   return (
     <Row className="justify-content-md-end justify-content-center align-items-center p-2">
       <Col className="col-md-auto">
@@ -36,7 +48,9 @@ export default function Pagination({ setFilters, currentPage, totalCount, itemsP
           }
           max={Math.ceil(totalCount / itemsPerPage)}
           defaultValue={currentPage}
-          onChange={e => setFilters(prev => ({ ...prev, page: e.target.value }))}
+          onChange={({ target: { value } }) => {
+            onChangePageNumber(value.trim());
+          }}
         />
       </Col>
       <Col className="col-md-auto">

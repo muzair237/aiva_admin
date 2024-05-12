@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import Head from 'next/head';
 import { Col, Container, Row, Card, CardHeader, UncontrolledTooltip } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { format } from 'date-fns';
@@ -102,6 +103,10 @@ const Permissions = () => {
 
   return (
     <>
+      <Head>
+        <title>AIVA | Permissions</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <div className="page-content">
         <Container fluid>
           <BreadCrumb title="Permissions" />
