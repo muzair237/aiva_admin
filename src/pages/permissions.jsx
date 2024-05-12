@@ -104,7 +104,7 @@ const Permissions = () => {
   return (
     <>
       <Head>
-        <title>AIVA | Permissions</title>
+        <title>AIVA | PERMISSIONS</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <div className="page-content">

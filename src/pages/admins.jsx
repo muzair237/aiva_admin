@@ -127,7 +127,7 @@ const Admins = () => {
   return (
     <>
       <Head>
-        <title>AIVA | Admins</title>
+        <title>AIVA | ADMINS</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <div className="page-content">
@@ -135,7 +135,7 @@ const Admins = () => {
           <BreadCrumb title="Admins" />
           <Row>
             <Col lg={12}>
-              <Card id="roleList">
+              <Card id="adminList">
                 <CardHeader>
                   <Row className="g-4 align-items-center">
                     <div className="col-sm">

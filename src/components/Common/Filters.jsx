@@ -449,18 +449,20 @@ const AdminGlobalFilter = ({ setFilters, uniqueRoles }) => {
               />
             </div>
           </Col>
-          <Col sm={4}>
-            <div>
-              <Select
-                // styles={customStyles}
-                value={typeFilter}
-                onChange={onChangeTypeFilter}
-                options={typeOptions}
-                name="choices-single-default"
-                id="idStatus"
-              />
-            </div>
-          </Col>
+          {uniqueRoles && uniqueRoles?.length > 0 && (
+            <Col sm={4}>
+              <div>
+                <Select
+                  // styles={customStyles}
+                  value={typeFilter}
+                  onChange={onChangeTypeFilter}
+                  options={typeOptions}
+                  name="choices-single-default"
+                  id="idStatus"
+                />
+              </div>
+            </Col>
+          )}
           <Col>
             <Button
               onClick={clearFilters}

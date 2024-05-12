@@ -8,6 +8,7 @@ const Navdata = () => {
   const [isRoles, setIsRoles] = useState(false);
   const [isAdmins, setIsAdmins] = useState(false);
   const [isUsers, setIsUsers] = useState(false);
+  const [isFeedbacks, setIsFeedbacks] = useState(false);
 
   const [iscurrentState, setIscurrentState] = useState('Dashboard');
 
@@ -78,7 +79,7 @@ const Navdata = () => {
     {
       id: 'admins',
       label: 'Admins',
-      icon: 'ri-user-fill',
+      icon: 'ri-admin-fill',
       path: '/admins',
       stateVariables: isAdmins,
       click(e) {
@@ -98,6 +99,19 @@ const Navdata = () => {
         e.preventDefault();
         setIsUsers(!isUsers);
         setIscurrentState('Users');
+        updateIconSidebar(e);
+      },
+    },
+    {
+      id: 'feedbacks',
+      label: 'Feedbacks',
+      icon: 'ri-feedback-fill',
+      path: '/feedbacks',
+      stateVariables: isFeedbacks,
+      click(e) {
+        e.preventDefault();
+        setIsFeedbacks(!isFeedbacks);
+        setIscurrentState('Feedbacks');
         updateIconSidebar(e);
       },
     },

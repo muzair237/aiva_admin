@@ -6,3 +6,9 @@ export const roleColumns = [`Created At`, `Type`, `Description`, `Actions`];
 
 // ADMIN COLUMN(S)
 export const adminColumns = [`Created At`, `Full Name`, `Email`, `Roles`, `Actions`];
+
+// USER COLUMN(S)
+export const userColumns = [`Created At`, `Full Name`, `Email`, `Date of Birth`];
+
+// FEEDBACK COLUMN(S)
+export const feedbackColumns = [`Created At`, `Feedback`, `Given By`];

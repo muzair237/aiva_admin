@@ -102,7 +102,7 @@ const Roles = () => {
   return (
     <>
       <Head>
-        <title>AIVA | Roles</title>
+        <title>AIVA | ROLES</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <div className="page-content">

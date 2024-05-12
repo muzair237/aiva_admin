@@ -23,3 +23,6 @@ export const EDIT_ADIMN = 'update-admin';
 export const DELETE_ADMIN = '/delete-admin';
 export const UPDATE_PASSWORD = '/get-permissions';
 export const GET_UNIQUE_ROLES = '/get-unique-roles';
+
+// ADMIN ENDPOINT(S)
+export const GET_ALL_USERS = 'get-all-users';
