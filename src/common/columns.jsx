@@ -11,4 +11,4 @@ export const adminColumns = [`Created At`, `Full Name`, `Email`, `Roles`, `Actio
 export const userColumns = [`Created At`, `Full Name`, `Email`, `Date of Birth`];
 
 // FEEDBACK COLUMN(S)
-export const feedbackColumns = [`Created At`, `Feedback`, `Given By`];
+export const feedbackColumns = [`Created At`, `Given By`, `Email`, `Feedback`];

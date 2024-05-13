@@ -313,19 +313,24 @@ const RoleGlobalFilter = ({ setFilters }) => {
   );
 };
 
-const AdminGlobalFilter = ({ setFilters, uniqueRoles }) => {
+const AdminGlobalFilter = ({ setFilters, uniqueRoles, ignoreSorting }) => {
   const [searchText, setSearchText] = useState('');
   const flatpickrRef = useRef(null);
   const debounceRef = useRef(0);
   const [adminFilter, setAdminFilter] = useState({ label: 'Latest', value: 'latest' });
   const [typeFilter, setTypeFilter] = useState({ label: 'All', value: 'all' });
 
-  const options = [
-    { label: 'A - Z', value: 'asc' },
-    { label: 'Z - A', value: 'desc' },
-    { label: 'Latest', value: 'latest' },
-    { label: 'Earliest', value: 'earliest' },
-  ];
+  const options = ignoreSorting
+    ? [
+        { label: 'Latest', value: 'latest' },
+        { label: 'Earliest', value: 'earliest' },
+      ]
+    : [
+        { label: 'A - Z', value: 'asc' },
+        { label: 'Z - A', value: 'desc' },
+        { label: 'Latest', value: 'latest' },
+        { label: 'Earliest', value: 'earliest' },
+      ];
 
   const typeOptions = uniqueRoles &&
     uniqueRoles.length > 0 && [

@@ -18,6 +18,9 @@ import adminReducer from './admins/reducer';
 // User
 import userReducer from './users/reducer';
 
+// Feedback
+import feedbackReducer from './feedbacks/reducer';
+
 const rootReducer = combineReducers({
   Layout: LayoutReducer,
   Auth: AuthReducer,
@@ -25,6 +28,7 @@ const rootReducer = combineReducers({
   Role: roleReducer,
   Admin: adminReducer,
   User: userReducer,
+  Feedback: feedbackReducer,
 });
 
 export default rootReducer;

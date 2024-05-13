@@ -4,15 +4,15 @@ import { Col, Container, Row, Card, CardHeader } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { format } from 'date-fns';
 import withAuthProtection from '../components/Common/withAuthProtection';
-import { userColumns } from '../common/columns';
+import { feedbackColumns } from '../common/columns';
 import TableContainer from '../components/Common/TableContainer';
 import BreadCrumb from '../components/Common/BreadCrumb';
-import userThunk from '../slices/users/thunk';
+import feedbackThunk from '../slices/feedbacks/thunk';
 
-const Users = () => {
+const Feedbacks = () => {
   const dispatch = useDispatch();
-  const users = useSelector(state => state?.User?.users || {});
-  const isLoading = useSelector(state => state?.User?.isLoading);
+  const feedbacks = useSelector(state => state?.Feedback?.feedbacks || {});
+  const isLoading = useSelector(state => state?.Feedback?.isLoading);
 
   const [filters, setFilters] = useState({
     page: 1,
@@ -29,26 +29,26 @@ const Users = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(userThunk.getAllUsers(filters));
+    dispatch(feedbackThunk.getAllFeedbacks(filters));
   }, [filters]);
 
-  const { user_rows, totalCount } = useMemo(
+  const { feedback_rows, totalCount } = useMemo(
     () => ({
-      user_rows: users?.items?.map(_ => [
+      feedback_rows: feedbacks?.items?.map(_ => [
         format(new Date(_?.createdAt), 'yyyy-MM-dd') || '------------',
-        `${_?.first_name} ${_?.last_name}` || '------------',
-        _?.email || '------------',
-        format(new Date(_?.DOB), 'yyyy-MM-dd') || '------------',
+        `${_?.user_id?.first_name} ${_?.user_id?.last_name}` || '------------',
+        _?.user_id?.email || '------------',
+        _?.feedback || '------------',
       ]),
-      totalCount: users?.totalItems,
+      totalCount: feedbacks?.totalItems,
     }),
-    [users?.items],
+    [feedbacks?.items],
   );
 
   return (
     <>
       <Head>
-        <title>AIVA | USERS</title>
+        <title>AIVA | FEEDBACKS</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <div className="page-content">
@@ -69,11 +69,12 @@ const Users = () => {
                 <div className="card-body pt-0">
                   <div>
                     <TableContainer
-                      columns={userColumns}
-                      data={user_rows || []}
+                      columns={feedbackColumns}
+                      data={feedback_rows || []}
                       isGlobalFilter
                       isLoading={isLoading}
                       isAdminFilter
+                      ignoreSorting
                       currentPage={filters?.page}
                       totalCount={totalCount}
                       itemsPerPage={filters?.itemsPerPage}
@@ -90,4 +91,4 @@ const Users = () => {
   );
 };
 
-export default withAuthProtection(Users);
+export default withAuthProtection(Feedbacks);

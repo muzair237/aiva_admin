@@ -24,5 +24,8 @@ export const DELETE_ADMIN = '/delete-admin';
 export const UPDATE_PASSWORD = '/get-permissions';
 export const GET_UNIQUE_ROLES = '/get-unique-roles';
 
-// ADMIN ENDPOINT(S)
+// USER ENDPOINT(S)
 export const GET_ALL_USERS = 'get-all-users';
+
+// FEEDBACK ENDPOINT(S)
+export const GET_ALL_FEEDBACKS = 'get-all-feedbacks';
