@@ -8,6 +8,7 @@ const Navdata = () => {
   const [isRoles, setIsRoles] = useState(false);
   const [isAdmins, setIsAdmins] = useState(false);
   const [isUsers, setIsUsers] = useState(false);
+  const [isQnA, setIsQna] = useState(false);
   const [isFeedbacks, setIsFeedbacks] = useState(false);
 
   const [iscurrentState, setIscurrentState] = useState('Dashboard');
@@ -99,6 +100,19 @@ const Navdata = () => {
         e.preventDefault();
         setIsUsers(!isUsers);
         setIscurrentState('Users');
+        updateIconSidebar(e);
+      },
+    },
+    {
+      id: 'QnA',
+      label: 'QnA',
+      icon: 'ri-questionnaire-fill',
+      path: '/qna',
+      stateVariables: isQnA,
+      click(e) {
+        e.preventDefault();
+        setIsQna(!isQnA);
+        setIscurrentState('QnA');
         updateIconSidebar(e);
       },
     },

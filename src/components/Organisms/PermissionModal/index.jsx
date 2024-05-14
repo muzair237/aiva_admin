@@ -80,6 +80,7 @@ export default function PermissionModal({ permission, isOpen, setIsOpen }) {
     // if (!permissions?.length > 0)
     dispatch(permissionThunk.getUniqueParents());
   }, []);
+  console.log(permission && permissionOptions?.filter(({ value }) => permission?.parent?.includes(value)));
   return (
     <Modal id="showModal" backdrop="static" isOpen={isOpen} centered>
       <ModalHeader className="bg-light p-3" toggle={() => setIsOpen(false)}>

@@ -27,5 +27,8 @@ export const GET_UNIQUE_ROLES = '/get-unique-roles';
 // USER ENDPOINT(S)
 export const GET_ALL_USERS = 'get-all-users';
 
+// QUESTIONS ENDPOINT(S)
+export const GET_ALL_QUESTIONS = 'get-all-questions';
+
 // FEEDBACK ENDPOINT(S)
 export const GET_ALL_FEEDBACKS = 'get-all-feedbacks';

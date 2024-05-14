@@ -18,6 +18,9 @@ import adminReducer from './admins/reducer';
 // User
 import userReducer from './users/reducer';
 
+// Question
+import questionReducer from './qnas/reducer';
+
 // Feedback
 import feedbackReducer from './feedbacks/reducer';
 
@@ -28,6 +31,7 @@ const rootReducer = combineReducers({
   Role: roleReducer,
   Admin: adminReducer,
   User: userReducer,
+  Question: questionReducer,
   Feedback: feedbackReducer,
 });
 

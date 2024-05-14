@@ -36,7 +36,7 @@ const TableContainer = ({
         </thead>
         <tbody className="list form-check-all">
           {isLoading ? (
-            Array(10)
+            Array(8)
               .fill()
               .map((_, i) => (
                 <tr key={i}>

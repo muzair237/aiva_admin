@@ -12,3 +12,6 @@ export const userColumns = [`Created At`, `Full Name`, `Email`, `Date of Birth`]
 
 // FEEDBACK COLUMN(S)
 export const feedbackColumns = [`Created At`, `Given By`, `Email`, `Feedback`];
+
+// QnA COLUMN(S)
+export const qnaColumns = [`Created At`, `Question`, `Answer`, `Keywords`, `Actions`];

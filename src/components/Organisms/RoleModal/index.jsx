@@ -24,7 +24,6 @@ export default function RoleModal({ role, isOpen, setIsOpen }) {
     refetch: v.refetch,
   }));
 
-
   const initialValues = { type: '', description: '' };
   const validationSchema = Yup.object().shape({
     type: Yup.string()
