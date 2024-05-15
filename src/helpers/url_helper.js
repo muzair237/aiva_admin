@@ -2,6 +2,9 @@
 export const LOGIN = 'login';
 export const LOGOUT = 'logout';
 
+// DASHBOARD ENDPOINT(S)
+export const GET_ALL_DASHBOARD_CARDS = 'get-all-dashboard-cards';
+
 // PERMISSIONS ENDPOINT(S)
 export const GET_ALL_PERMISSIONS = 'get-all-permissions';
 export const CREATE_PERMISSION = 'create-permission';
@@ -29,6 +32,9 @@ export const GET_ALL_USERS = 'get-all-users';
 
 // QUESTIONS ENDPOINT(S)
 export const GET_ALL_QUESTIONS = 'get-all-questions';
+export const CREATE_QUESTION = 'create-question';
+export const EDIT_QUESTION = 'update-question';
+export const DELETE_QUESTION = 'delete-question';
 
 // FEEDBACK ENDPOINT(S)
 export const GET_ALL_FEEDBACKS = 'get-all-feedbacks';

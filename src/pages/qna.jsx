@@ -4,7 +4,6 @@ import { Col, Container, Row, Card, CardHeader, UncontrolledTooltip } from 'reac
 import { useDispatch, useSelector } from 'react-redux';
 import { format } from 'date-fns';
 import { MdOutlineModeEdit, MdDeleteOutline } from 'react-icons/md';
-import { GrUpdate } from 'react-icons/gr';
 import { useContextHook } from 'use-context-hook';
 import { RefetchContext } from '../contexts/refetchContext';
 import withAuthProtection from '../components/Common/withAuthProtection';
@@ -13,11 +12,10 @@ import TableContainer from '../components/Common/TableContainer';
 import BreadCrumb from '../components/Common/BreadCrumb';
 import questionThunk from '../slices/qnas/thunk';
 import Button from '../components/Atoms/Button';
-import AdminModal from '../components/Organisms/AdminModal';
-import UpdatePasswordModal from '../components/Organisms/UpdatePassword';
+import CreateQuestionModal from '../components/Organisms/CreateQuestion';
 import DeleteModal from '../components/Molecules/DeleteModal';
 
-const Admins = () => {
+const QnA = () => {
   const dispatch = useDispatch();
   const { fetch, refetch } = useContextHook(RefetchContext, v => ({
     fetch: v.fetch,
@@ -26,11 +24,10 @@ const Admins = () => {
   const questions = useSelector(state => state?.Question?.questions || {});
   const isLoading = useSelector(state => state?.Question?.isLoading);
 
-  const [adminModal, setAdminModal] = useState(false);
-  const [updatePasswordModal, setUpdatePasswordModal] = useState(false);
+  const [createQuesModal, setCreateQuesModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const [admin, setAdmin] = useState();
-  const [adminToDelete, setAdminToDelete] = useState();
+  const [question, setQuestion] = useState();
+  const [quesToDelete, setQuesToDelete] = useState();
   const [filters, setFilters] = useState({
     page: 1,
     itemsPerPage: 10,
@@ -46,8 +43,8 @@ const Admins = () => {
     setFilters(newSearchQuery);
   }, []);
 
-  const deleteAdmin = () => {
-    dispatch(adminThunk.deleteAdmin({ adminToDelete, setDeleteModal, refetch }));
+  const deleteQuestion = () => {
+    dispatch(questionThunk.deleteQuestion({ quesToDelete, setDeleteModal, refetch }));
   };
 
   useEffect(() => {
@@ -61,8 +58,8 @@ const Admins = () => {
           <MdOutlineModeEdit
             style={{ cursor: 'pointer' }}
             onClick={() => {
-              setAdmin(_);
-              setAdminModal(true);
+              setQuestion(_);
+              setCreateQuesModal(true);
             }}
             color="green"
             size={19}
@@ -72,21 +69,6 @@ const Admins = () => {
             Edit
           </UncontrolledTooltip>
         </div>
-        <div className="update-password">
-          <GrUpdate
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              setAdmin(_?._id);
-              setUpdatePasswordModal(true);
-            }}
-            color="blue"
-            size={15}
-            id="update-password"
-          />
-          <UncontrolledTooltip placement="top" target="update-password">
-            Update Password
-          </UncontrolledTooltip>
-        </div>
         <div className="remove">
           <MdDeleteOutline
             style={{ cursor: 'pointer' }}
@@ -94,7 +76,7 @@ const Admins = () => {
             size={19}
             color="red"
             onClick={() => {
-              setAdminToDelete(_?._id);
+              setQuesToDelete(_?._id);
               setDeleteModal(true);
             }}
           />
@@ -142,8 +124,8 @@ const Admins = () => {
                       <div>
                         <Button
                           onClick={() => {
-                            setAdmin();
-                            setAdminModal(true);
+                            setQuestion();
+                            setCreateQuesModal(true);
                           }}
                           type="button"
                           className="btn btn-success add-btn"
@@ -174,16 +156,19 @@ const Admins = () => {
           </Row>
         </Container>
       </div>
+      {createQuesModal && (
+        <CreateQuestionModal question={question} isOpen={createQuesModal} setIsOpen={setCreateQuesModal} />
+      )}
       {deleteModal && (
         <DeleteModal
           isOpen={deleteModal}
           setIsOpen={setDeleteModal}
-          handleClick={deleteAdmin}
-          message="Are you sure you Want to Delete this Admin?"
+          handleClick={deleteQuestion}
+          message="Are you sure you Want to Delete this Question?"
         />
       )}
     </>
   );
 };
 
-export default withAuthProtection(Admins);
+export default withAuthProtection(QnA);

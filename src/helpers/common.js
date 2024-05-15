@@ -32,3 +32,15 @@ export const clearAllCookies = () => {
 
   return true;
 };
+
+export const greetings = () => {
+  const currentHour = new Date().getHours();
+
+  return currentHour >= 4 && currentHour < 12
+    ? 'Good Morning'
+    : currentHour >= 12 && currentHour < 18
+    ? 'Good Afternoon'
+    : currentHour >= 18 && currentHour < 21
+    ? 'Good Evening'
+    : 'Good Night';
+};

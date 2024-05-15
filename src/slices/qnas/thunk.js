@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Toast } from '../../components/Molecules/Toast';
 import { Fetch } from '../../helpers/fetchWrapper';
-import { GET_ALL_QUESTIONS } from '../../helpers/url_helper';
+import { GET_ALL_QUESTIONS, CREATE_QUESTION, EDIT_QUESTION, DELETE_QUESTION } from '../../helpers/url_helper';
 
-const questionColumns = {
+const questionThunk = {
   url: `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/QnA`,
 
   getAllQuestions: createAsyncThunk(
@@ -19,7 +19,7 @@ const questionColumns = {
     }) => {
       try {
         let res = await Fetch.get(
-          `${questionColumns.url}/${GET_ALL_QUESTIONS}?page=${page}&itemsPerPage=${itemsPerPage}&getAll=${getAll}&startDate=${startDate}&endDate=${endDate}&searchText=${searchText}&sort=${sort}`,
+          `${questionThunk.url}/${GET_ALL_QUESTIONS}?page=${page}&itemsPerPage=${itemsPerPage}&getAll=${getAll}&startDate=${startDate}&endDate=${endDate}&searchText=${searchText}&sort=${sort}`,
         );
         if (res.status >= 200 && res.status < 300) {
           res = await res.json();
@@ -37,77 +37,77 @@ const questionColumns = {
     },
   ),
 
-  //   createAdmin: createAsyncThunk('admin/createAdmin', async ({ payload, setIsOpen, refetch }) => {
-  //     try {
-  //       let res = await Fetch.post(`${questionColumns.url}/${CREATE_ADMIN}`, payload);
-  //       if (res.status >= 200 && res.status < 300) {
-  //         res = await res.json();
-  //         refetch(prev => !prev);
-  //         setIsOpen(prev => !prev);
-  //         Toast({
-  //           type: 'success',
-  //           message: 'Admin Created Successfully!',
-  //         });
-  //         return res;
-  //       }
-  //       const { message } = await res.json();
-  //       throw new Error(message ?? 'Something Went Wrong');
-  //     } catch ({ message }) {
-  //       Toast({
-  //         type: 'error',
-  //         message,
-  //       });
-  //       throw message;
-  //     }
-  //   }),
+  createQuestion: createAsyncThunk('question/createQuestion', async ({ payload, setIsOpen, refetch }) => {
+    try {
+      let res = await Fetch.post(`${questionThunk.url}/${CREATE_QUESTION}`, payload);
+      if (res.status >= 200 && res.status < 300) {
+        res = await res.json();
+        refetch(prev => !prev);
+        setIsOpen(prev => !prev);
+        Toast({
+          type: 'success',
+          message: 'Question Created Successfully!',
+        });
+        return res;
+      }
+      const { message } = await res.json();
+      throw new Error(message ?? 'Something Went Wrong');
+    } catch ({ message }) {
+      Toast({
+        type: 'error',
+        message,
+      });
+      throw message;
+    }
+  }),
 
-  //   editAdmin: createAsyncThunk('admin/editAdmin', async ({ id, payload, setIsOpen, refetch }) => {
-  //     try {
-  //       let res = await Fetch.put(`${questionColumns.url}/${EDIT_ADIMN}/${id}`, payload);
-  //       if (res.status >= 200 && res.status < 300) {
-  //         res = await res.json();
-  //         refetch(prev => !prev);
-  //         setIsOpen(prev => !prev);
-  //         Toast({
-  //           type: 'success',
-  //           message: 'Admin Information Edited Successfully!',
-  //         });
-  //         return res;
-  //       }
-  //       const { message } = await res.json();
-  //       throw new Error(message ?? 'Something Went Wrong');
-  //     } catch ({ message }) {
-  //       Toast({
-  //         type: 'error',
-  //         message,
-  //       });
-  //       throw message;
-  //     }
-  //   }),
+  editQuestion: createAsyncThunk('question/editQuestion', async ({ id, payload, setIsOpen, refetch }) => {
+    try {
+      let res = await Fetch.put(`${questionThunk.url}/${EDIT_QUESTION}/${id}`, payload);
+      if (res.status >= 200 && res.status < 300) {
+        res = await res.json();
+        refetch(prev => !prev);
+        setIsOpen(prev => !prev);
+        Toast({
+          type: 'success',
+          message: 'Question Edited Successfully!',
+        });
+        return res;
+      }
+      const { message } = await res.json();
+      throw new Error(message ?? 'Something Went Wrong');
+    } catch ({ message }) {
+      Toast({
+        type: 'error',
+        message,
+      });
+      throw message;
+    }
+  }),
 
-  //   deleteAdmin: createAsyncThunk('admin/deleteAdmin', async ({ adminToDelete, setDeleteModal, refetch }) => {
-  //     try {
-  //       let res = await Fetch.delete(`${questionColumns.url}/${DELETE_ADMIN}/${adminToDelete}`);
-  //       if (res.status >= 200 && res.status < 300) {
-  //         res = await res.json();
-  //         refetch(prev => !prev);
-  //         setDeleteModal(false);
-  //         Toast({
-  //           type: 'success',
-  //           message: 'Admin Deleted Successfully!',
-  //         });
-  //         return res;
-  //       }
-  //       const { message } = await res.json();
-  //       throw new Error(message ?? 'Something Went Wrong');
-  //     } catch ({ message }) {
-  //       Toast({
-  //         type: 'error',
-  //         message,
-  //       });
-  //       throw message;
-  //     }
-  //   }),
+  deleteQuestion: createAsyncThunk('question/deleteQuestion', async ({ quesToDelete, setDeleteModal, refetch }) => {
+    try {
+      let res = await Fetch.delete(`${questionThunk.url}/${DELETE_QUESTION}/${quesToDelete}`);
+      if (res.status >= 200 && res.status < 300) {
+        res = await res.json();
+        refetch(prev => !prev);
+        setDeleteModal(false);
+        Toast({
+          type: 'success',
+          message: 'Question Deleted Successfully!',
+        });
+        return res;
+      }
+      const { message } = await res.json();
+      throw new Error(message ?? 'Something Went Wrong');
+    } catch ({ message }) {
+      Toast({
+        type: 'error',
+        message,
+      });
+      throw message;
+    }
+  }),
 };
 
-export default questionColumns;
+export default questionThunk;

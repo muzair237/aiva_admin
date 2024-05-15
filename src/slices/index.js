@@ -6,6 +6,9 @@ import LayoutReducer from './layouts/reducer';
 // Auth
 import AuthReducer from './auth/reducer';
 
+// Dashboard
+import dashboardReducer from './dashboard/reducer';
+
 // Permission
 import permissionReducer from './permissions/reducer';
 
@@ -27,6 +30,7 @@ import feedbackReducer from './feedbacks/reducer';
 const rootReducer = combineReducers({
   Layout: LayoutReducer,
   Auth: AuthReducer,
+  Dashboard: dashboardReducer,
   Permission: permissionReducer,
   Role: roleReducer,
   Admin: adminReducer,

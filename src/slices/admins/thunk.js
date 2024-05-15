@@ -1,14 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Toast } from '../../components/Molecules/Toast';
 import { Fetch } from '../../helpers/fetchWrapper';
-import {
-  GET_ALL_ADMINS,
-  GET_UNIQUE_ROLES,
-  CREATE_ADMIN,
-  EDIT_ADIMN,
-  DELETE_ADMIN,
-  GET_PERMISSIONS,
-} from '../../helpers/url_helper';
+import { GET_ALL_ADMINS, GET_UNIQUE_ROLES, CREATE_ADMIN, EDIT_ADIMN, DELETE_ADMIN } from '../../helpers/url_helper';
 
 const adminThunk = {
   url: `${process.env.NEXT_PUBLIC_ADMIN_API_URL}/admin`,
