@@ -10,12 +10,15 @@ import BreadCrumb from '../components/Common/BreadCrumb';
 import withAuthProtection from '../components/Common/withAuthProtection';
 import Button from '../components/Atoms/Button';
 import { greetings } from '../helpers/common';
+import DashCards from '../components/Organisms/DashCards';
+import GaugeChart from '../components/Organisms/GuageChart';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const { name } = useSelector(state => state?.Auth?.user);
   //   const isLoading = useSelector(state => state?.Dashboard?.isLoading);
-  const dashboardAnalytics = useSelector(state => state?.Dashboard?.dashboardAnalytics);
+  const dashboardCards = useSelector(state => state?.Dashboard?.dashboardCards);
+  console.log(dashboardCards);
   const [filters, setFilters] = useState({
     startDate: '',
     endDate: '',
@@ -97,6 +100,10 @@ const Dashboard = () => {
                 </div>
               </div>
             </Col>
+          </Row>
+          <Row>
+            <DashCards dashboardCards={dashboardCards} />
+            <GaugeChart />
           </Row>
         </Container>
       </div>

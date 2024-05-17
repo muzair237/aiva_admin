@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import dashboardThunk from './thunk';
 
 const initialState = {
-  dashboardAnalytics: {},
+  dashboardCards: {},
   isLoading: false,
   errorMsg: '',
 };
@@ -19,7 +19,7 @@ const dashboardSlice = createSlice({
       })
       .addCase(dashboardThunk.getDashboardCards.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.dashboardAnalytics = action?.payload;
+        state.dashboardCards = action?.payload;
       })
       .addCase(dashboardThunk.getDashboardCards.rejected, (state, action) => {
         state.isLoading = false;
