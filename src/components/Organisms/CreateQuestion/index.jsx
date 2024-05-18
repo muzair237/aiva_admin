@@ -24,8 +24,8 @@ export default function CreateQuestionModal({ question, isOpen, setIsOpen }) {
   const initialValues = { question: '', answer: '', keywords: [] };
 
   const validationSchema = Yup.object().shape({
-    question: Yup.string().required('Question is required').max(255, 'Question must be at most 255 characters!'),
-    answer: Yup.string().required('Answer is required').max(255, 'Answer must be at most 255 characters!'),
+    question: Yup.string().required('Question is required').max(500, 'Question must not exceed 500 characters!'),
+    answer: Yup.string().required('Answer is required').max(500, 'Answer must not exceed 500 characters!'),
     keywords: Yup.array().min(1, 'Please Enter at least One Keyword!'),
   });
 
@@ -60,7 +60,7 @@ export default function CreateQuestionModal({ question, isOpen, setIsOpen }) {
                   <Input
                     name="question"
                     value={question && question?.question}
-                    type="text"
+                    type="textarea"
                     placeholder="What majors does your university offer?"
                   />
                 </Col>
@@ -71,7 +71,7 @@ export default function CreateQuestionModal({ question, isOpen, setIsOpen }) {
                   <Input
                     name="answer"
                     value={question && question?.answer}
-                    type="text"
+                    type="textarea"
                     placeholder="We offer majors in various fields including engineering, business etc."
                   />
                 </Col>

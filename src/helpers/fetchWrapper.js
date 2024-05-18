@@ -1,4 +1,14 @@
-import { getCookie } from './common';
+import { getCookie, clearAllCookies } from './common';
+
+let trigger = false;
+function handleResponse(response) {
+  if (response.status === 401 && !trigger && getCookie(process.env.NEXT_PUBLIC_ADMIN_TOKEN_COOKIE)) {
+    trigger = true;
+    clearAllCookies();
+    window.location.reload();
+  }
+  return response;
+}
 
 async function get(url) {
   const headers = {
@@ -10,8 +20,7 @@ async function get(url) {
     headers,
   };
 
-  const res = await fetch(url, requestOptions);
-  return res;
+  return fetch(url, requestOptions).then(res => handleResponse(res));
 }
 
 async function post(url, body) {
@@ -26,8 +35,7 @@ async function post(url, body) {
     body: JSON.stringify(body),
   };
 
-  const res = await fetch(url, requestOptions);
-  return res;
+  return fetch(url, requestOptions).then(res => handleResponse(res));
 }
 
 async function upload(url, method, body) {
@@ -42,8 +50,7 @@ async function upload(url, method, body) {
     body,
   };
 
-  const res = await fetch(url, requestOptions);
-  return res;
+  return fetch(url, requestOptions).then(res => handleResponse(res));
 }
 
 async function put(url, body) {
@@ -57,8 +64,7 @@ async function put(url, body) {
     body: JSON.stringify(body),
   };
 
-  const res = await fetch(url, requestOptions);
-  return res;
+  return fetch(url, requestOptions).then(res => handleResponse(res));
 }
 
 async function _delete(url, body) {
@@ -72,8 +78,7 @@ async function _delete(url, body) {
     body: JSON.stringify(body),
   };
 
-  const res = await fetch(url, requestOptions);
-  return res;
+  return fetch(url, requestOptions).then(res => handleResponse(res));
 }
 
 async function patch(url, body) {
@@ -87,8 +92,7 @@ async function patch(url, body) {
     body: JSON.stringify(body),
   };
 
-  const res = await fetch(url, requestOptions);
-  return res;
+  return fetch(url, requestOptions).then(res => handleResponse(res));
 }
 
 export const Fetch = {

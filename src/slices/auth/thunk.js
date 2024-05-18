@@ -37,11 +37,12 @@ const authThunk = {
     try {
       await Fetch.get(`${authThunk.url}/${LOGOUT}`);
       clearAllCookies();
+      localStorage.clear();
+      router.push('/login');
       Toast({
         type: 'success',
         message: 'Logged Out Successfully!',
       });
-      router.push('/login');
     } catch {
       Toast({
         type: 'error',

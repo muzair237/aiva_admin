@@ -8,7 +8,7 @@ const DashCards = ({ dashboardCards }) => (
       dashboardCards?.length > 0 &&
       dashboardCards?.map((ele, index) => (
         <Col xl={3} md={6} key={index}>
-          <Card className="card-animate">
+          <Card>
             <CardBody>
               <div className="d-flex align-items-center">
                 <div className="flex-grow-1 overflow-hidden">

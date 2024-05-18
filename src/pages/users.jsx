@@ -51,7 +51,7 @@ const Users = () => {
         <title>AIVA | USERS</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <div className="page-content">
+      <div className="page-content card-animate">
         <Container fluid>
           <BreadCrumb title="Users" />
           <Row>

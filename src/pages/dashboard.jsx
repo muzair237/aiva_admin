@@ -12,13 +12,14 @@ import Button from '../components/Atoms/Button';
 import { greetings } from '../helpers/common';
 import DashCards from '../components/Organisms/DashCards';
 import GaugeChart from '../components/Organisms/GuageChart';
+import RecentQueries from '../components/Organisms/RecentQueries';
+import PieChart from '../components/Organisms/PieChart';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const { name } = useSelector(state => state?.Auth?.user);
   //   const isLoading = useSelector(state => state?.Dashboard?.isLoading);
   const dashboardCards = useSelector(state => state?.Dashboard?.dashboardCards);
-  console.log(dashboardCards);
   const [filters, setFilters] = useState({
     startDate: '',
     endDate: '',
@@ -46,7 +47,7 @@ const Dashboard = () => {
         <title>AIVA | DASHBOARD</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <div className="page-content">
+      <div className="page-content card-animate">
         <Container fluid>
           <BreadCrumb title="Dashboard" />
           <Row className="mb-3 pb-1">
@@ -103,7 +104,9 @@ const Dashboard = () => {
           </Row>
           <Row>
             <DashCards dashboardCards={dashboardCards} />
+            <PieChart />
             <GaugeChart />
+            <RecentQueries />
           </Row>
         </Container>
       </div>

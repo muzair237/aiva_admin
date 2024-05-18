@@ -12,7 +12,7 @@ const Input = ({ name, type, placeholder, value, defaultValue, options, ...props
   useEffect(() => {
     if (defaultValue && defaultValue !== undefined) {
       setFieldValue(name, defaultValue);
-    } else if (value !== undefined && !values[name]) {
+    } else if ((value !== undefined && !values[name]) || Array.isArray(value)) {
       setFieldValue(name, value);
     }
   }, []);
@@ -46,6 +46,16 @@ const Input = ({ name, type, placeholder, value, defaultValue, options, ...props
           name={name}
           placeHolder={placeholder}
           value={value || values[name]}
+          {...props}
+        />
+      ) : type === 'textarea' ? (
+        <Field
+          as="textarea"
+          rows={3}
+          name={name}
+          className="form-control"
+          placeholder={placeholder}
+          value={values[name] || []}
           {...props}
         />
       ) : (

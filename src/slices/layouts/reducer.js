@@ -24,7 +24,7 @@ export const initialState = {
   leftSidebarViewType: leftSidebarViewTypes.DETACHED,
   leftsidbarSizeType: leftsidbarSizeTypes.DEFAULT,
   leftSidebarImageType: leftSidebarImageTypes.IMG3,
-  preloader: preloaderTypes.DISABLE,
+  preloader: preloaderTypes.ENABLE,
   sidebarVisibilitytype: sidebarVisibilitytypes.SHOW,
 };
 
