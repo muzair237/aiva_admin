@@ -4,6 +4,10 @@
 @import '../scss/config/interactive/custom.scss';
 @import './shepherd.css';
 @import './mermaid.min.css';
+@font-face {
+  font-family: 'Outfit';
+  src: url('../fonts/Outfit-VariableFont_wght.ttf') format('truetype'); /* Modern Browsers */
+}
 
 //RTL
 // @import "../scss/rtl/components-rtl";
@@ -19,6 +23,7 @@
 }
 
 body {
+  font-family: 'Outfit', sans-serif;
   * {
     outline: none;
   }
