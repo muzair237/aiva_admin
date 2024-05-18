@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
 
 const FullScreenDropdown = () => {
-  /*
-    mode
-    */
   const [isFullScreenMode, setIsFullScreenMode] = useState(true);
-
-  /*
-    full screen
-    */
   const toggleFullscreen = () => {
-    let document = window.document;
+    const { document } = window;
     document.body.classList.add('fullscreen-enable');
 
     if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
@@ -44,16 +37,14 @@ const FullScreenDropdown = () => {
     document.addEventListener('mozfullscreenchange', exitHandler);
   };
   return (
-    <React.Fragment>
-      <div className="ms-1 header-item d-none d-sm-flex">
-        <button
-          onClick={toggleFullscreen}
-          type="button"
-          className="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle">
-          <i className={isFullScreenMode ? 'bx bx-fullscreen fs-22' : 'bx bx-exit-fullscreen fs-22'}></i>
-        </button>
-      </div>
-    </React.Fragment>
+    <div className="ms-1 header-item d-none d-sm-flex">
+      <button
+        onClick={toggleFullscreen}
+        type="button"
+        className="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle">
+        <i className={isFullScreenMode ? 'bx bx-fullscreen fs-22' : 'bx bx-exit-fullscreen fs-22'} />
+      </button>
+    </div>
   );
 };
 

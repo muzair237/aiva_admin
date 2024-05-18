@@ -15,23 +15,29 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
 
     // For collapse horizontal menu
     if (document.documentElement.getAttribute('data-layout') === 'horizontal') {
-      document.body.classList.contains('menu')
-        ? document.body.classList.remove('menu')
-        : document.body.classList.add('menu');
+      const bodyHasMenuClass = document.body.classList.contains('menu');
+      if (bodyHasMenuClass) {
+        document.body.classList.remove('menu');
+      } else {
+        document.body.classList.add('menu');
+      }
     }
 
     // For collapse vertical menu
     if (document.documentElement.getAttribute('data-layout') === 'vertical') {
       if (windowSize < 1025 && windowSize > 767) {
         document.body.classList.remove('vertical-sidebar-enable');
-        document.documentElement.getAttribute('data-sidebar-size') === 'sm'
-          ? document.documentElement.setAttribute('data-sidebar-size', '')
-          : document.documentElement.setAttribute('data-sidebar-size', 'sm');
+        const sidebarSize = document.documentElement.getAttribute('data-sidebar-size');
+        if (sidebarSize === 'sm') {
+          document.documentElement.setAttribute('data-sidebar-size', '');
+        } else {
+          document.documentElement.setAttribute('data-sidebar-size', 'sm');
+        }
       } else if (windowSize > 1025) {
         document.body.classList.remove('vertical-sidebar-enable');
-        document.documentElement.getAttribute('data-sidebar-size') === 'lg'
-          ? document.documentElement.setAttribute('data-sidebar-size', 'sm')
-          : document.documentElement.setAttribute('data-sidebar-size', 'lg');
+        const sidebarSize = document.documentElement.getAttribute('data-sidebar-size');
+        const newSidebarSize = sidebarSize === 'lg' ? 'sm' : 'lg';
+        document.documentElement.setAttribute('data-sidebar-size', newSidebarSize);
       } else if (windowSize <= 767) {
         document.body.classList.add('vertical-sidebar-enable');
         document.documentElement.setAttribute('data-sidebar-size', 'lg');
@@ -40,9 +46,12 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
 
     // Two column menu
     if (document.documentElement.getAttribute('data-layout') === 'twocolumn') {
-      document.body.classList.contains('twocolumn-panel')
-        ? document.body.classList.remove('twocolumn-panel')
-        : document.body.classList.add('twocolumn-panel');
+      const hasTwoColumnPanelClass = document.body.classList.contains('twocolumn-panel');
+      if (hasTwoColumnPanelClass) {
+        document.body.classList.remove('twocolumn-panel');
+      } else {
+        document.body.classList.add('twocolumn-panel');
+      }
     }
   };
   return (
@@ -84,13 +93,8 @@ const Header = ({ onChangeLayoutMode, layoutModeType, headerClass }) => {
             </div>
 
             <div className="d-flex align-items-center">
-              {/* FullScreenDropdown */}
               <FullScreenDropdown />
-
-              {/* Dark/Light Mode set */}
               <LightDark layoutMode={layoutModeType} onChangeLayoutMode={onChangeLayoutMode} />
-
-              {/* ProfileDropdown */}
               <ProfileDropdown />
             </div>
           </div>

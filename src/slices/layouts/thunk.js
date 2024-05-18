@@ -18,18 +18,16 @@ import {
  * @param {*} param0
  */
 export const changeLayout = layout => async dispatch => {
-  try {
-    if (layout === 'twocolumn') {
-      document.documentElement.removeAttribute('data-layout-width');
-    } else if (layout === 'horizontal') {
-      document.documentElement.removeAttribute('data-sidebar-size');
-    } else if (layout === 'semibox') {
-      changeHTMLAttribute('data-layout-width', 'fluid');
-      changeHTMLAttribute('data-layout-style', 'default');
-    }
-    changeHTMLAttribute('data-layout', layout);
-    dispatch(changeLayoutAction(layout));
-  } catch (error) {}
+  if (layout === 'twocolumn') {
+    document.documentElement.removeAttribute('data-layout-width');
+  } else if (layout === 'horizontal') {
+    document.documentElement.removeAttribute('data-sidebar-size');
+  } else if (layout === 'semibox') {
+    changeHTMLAttribute('data-layout-width', 'fluid');
+    changeHTMLAttribute('data-layout-style', 'default');
+  }
+  changeHTMLAttribute('data-layout', layout);
+  dispatch(changeLayoutAction(layout));
 };
 
 /**
@@ -37,10 +35,8 @@ export const changeLayout = layout => async dispatch => {
  * @param {*} param0
  */
 export const changeLayoutMode = layoutMode => async dispatch => {
-  try {
-    changeHTMLAttribute('data-layout-mode', layoutMode);
-    dispatch(changeLayoutModeAction(layoutMode));
-  } catch (error) {}
+  changeHTMLAttribute('data-layout-mode', layoutMode);
+  dispatch(changeLayoutModeAction(layoutMode));
 };
 
 /**
@@ -68,6 +64,7 @@ export const changeLayoutWidth = layoutWidth => async dispatch => {
       changeHTMLAttribute('data-layout-width', 'boxed');
     }
     dispatch(changeLayoutWidthAction(layoutWidth));
+    return null; // Return null to indicate successful completion
   } catch (error) {
     return error;
   }
@@ -171,8 +168,6 @@ export const changeLeftsidebarViewType = leftsidebarViewtype => async dispatch =
  * @param {*} param0
  */
 export const changeSidebarVisibility = sidebarVisibilitytype => async dispatch => {
-  try {
-    changeHTMLAttribute('data-sidebar-visibility', sidebarVisibilitytype);
-    dispatch(changeSidebarVisibilityAction(sidebarVisibilitytype));
-  } catch (error) {}
+  changeHTMLAttribute('data-sidebar-visibility', sidebarVisibilitytype);
+  dispatch(changeSidebarVisibilityAction(sidebarVisibilitytype));
 };

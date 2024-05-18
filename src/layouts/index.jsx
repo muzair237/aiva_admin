@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
 import withRouter from '../components/Common/withRouter';
-
-//import Components
 import Header from './Header';
-import Sidebar from './Sidebar';
 import Footer from './Footer';
-// import RightSidebar from '../components/Common/RightSidebar';
-
-//import actions
+import Sidebar from './Sidebar';
 import {
   changeLayout,
   changeSidebarTheme,
@@ -20,9 +15,6 @@ import {
   changeLeftsidebarViewType,
   changeSidebarImageType,
 } from '../slices/layouts/thunk';
-
-//redux
-import { useSelector, useDispatch } from 'react-redux';
 
 const Layout = props => {
   const [headerClass, setHeaderClass] = useState('');
@@ -49,20 +41,26 @@ const Layout = props => {
     leftSidebarImageType: state.Layout.leftSidebarImageType,
   }));
   // class add remove in header
-  useEffect(() => {
-    window.addEventListener('scroll', scrollNavigation, true);
-  });
   function scrollNavigation() {
-    var scrollup = document.documentElement.scrollTop;
+    const scrollup = document.documentElement.scrollTop;
     if (scrollup > 50) {
       setHeaderClass('topbar-shadow');
     } else {
       setHeaderClass('');
     }
   }
-  /*
-    layout settings
-    */
+
+  useEffect(() => {
+    window.addEventListener('scroll', scrollNavigation, true);
+  });
+
+  useEffect(() => {
+    window.addEventListener('scroll', scrollNavigation);
+
+    return () => {
+      window.removeEventListener('scroll', scrollNavigation);
+    };
+  }, []);
   useEffect(() => {
     if (
       layoutType ||
@@ -97,9 +95,6 @@ const Layout = props => {
     leftSidebarImageType,
     dispatch,
   ]);
-  /*
-    call dark/light mode
-    */
   const onChangeLayoutMode = value => {
     if (changeLayoutMode) {
       dispatch(changeLayoutMode(value));
@@ -116,13 +111,8 @@ const Layout = props => {
           <Footer />
         </div>
       </div>
-      {/* <RightSidebar /> */}
     </>
   );
-};
-
-Layout.propTypes = {
-  children: PropTypes.object,
 };
 
 export default withRouter(Layout);

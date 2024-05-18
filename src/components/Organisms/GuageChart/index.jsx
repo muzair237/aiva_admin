@@ -3,13 +3,11 @@ import ReactEcharts from 'echarts-for-react';
 import { Card, CardHeader, Col } from 'reactstrap';
 import { format } from 'date-fns';
 
-const GaugeChart = ({ dataColors }) => {
-  //   const chartGaugeColors = getChartColorsArray(dataColors);
+const GaugeChart = () => {
   const option = {
     tooltip: {
       formatter: '{a} <br/>{b} : {c}%',
     },
-    // color: chartGaugeColors,
     textStyle: {
       fontFamily: 'Poppins, sans-serif',
     },

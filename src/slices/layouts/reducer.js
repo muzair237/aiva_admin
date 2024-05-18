@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-//constants
 import {
   layoutTypes,
   leftSidebarTypes,

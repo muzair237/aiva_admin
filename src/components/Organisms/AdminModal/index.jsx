@@ -82,7 +82,6 @@ export default function AdminModal({ admin, uniqueRoles, isOpen, setIsOpen }) {
     dispatch(roleThunk.getUniqueParents());
     if (admin) setIsEdit(true);
   }, []);
-  console.log();
 
   return (
     <>

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Collapse } from 'reactstrap';
@@ -12,24 +11,6 @@ const VerticalLayout = props => {
   const allowedPages = useSelector(state => state.Auth.allowedPages) || [];
   const router = useRouter();
   const navData = navdata().props.children;
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    const initMenu = () => {
-      const pathName = router.pathname;
-      const ul = document.getElementById('navbar-nav');
-      const items = ul.getElementsByTagName('a');
-      let itemsArray = [...items]; // converts NodeList to Array
-      removeActivation(itemsArray);
-      let matchingMenuItem = itemsArray.find(x => x.pathname === pathName);
-      if (matchingMenuItem) {
-        activateParentDropdown(matchingMenuItem);
-      }
-    };
-    if (props.layoutType === 'vertical') {
-      initMenu();
-    }
-  }, [router.pathname, props.layoutType, props.layoutType]);
 
   function activateParentDropdown(item) {
     item.classList.add('active');
@@ -59,7 +40,6 @@ const VerticalLayout = props => {
     }
     return false;
   }
-
   const removeActivation = items => {
     const actiItems = items.filter(x => x.classList.contains('active'));
 
@@ -82,11 +62,29 @@ const VerticalLayout = props => {
     });
   };
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const initMenu = () => {
+      const pathName = router.pathname;
+      const ul = document.getElementById('navbar-nav');
+      const items = ul.getElementsByTagName('a');
+      const itemsArray = [...items]; // converts NodeList to Array
+      removeActivation(itemsArray);
+      const matchingMenuItem = itemsArray.find(x => x.pathname === pathName);
+      if (matchingMenuItem) {
+        activateParentDropdown(matchingMenuItem);
+      }
+    };
+    if (props.layoutType === 'vertical') {
+      initMenu();
+    }
+  }, [router.pathname, props.layoutType, props.layoutType]);
+
   return (
     <>
       {/* menu Items */}
-      {(navData || []).map((item, key) => (
-        <React.Fragment key={key}>
+      {(navData || []).map((item, itemKey) => (
+        <React.Fragment key={itemKey}>
           {/* Main Header */}
           {item.isHeader ? (
             <li className="menu-title">
@@ -109,10 +107,10 @@ const VerticalLayout = props => {
               </Link>
               <Collapse className="menu-dropdown" isOpen={item.stateVariables} id="sidebarApps">
                 <ul className="nav nav-sm flex-column test">
-                  {/* subItms  */}
+                  {/* subItems  */}
                   {item.subItems &&
-                    (item.subItems || []).map((subItem, key) => (
-                      <React.Fragment key={key}>
+                    (item.subItems || []).map((subItem, subItemKey) => (
+                      <React.Fragment key={subItemKey}>
                         {!subItem.isChildItem ? (
                           <li className="nav-item">
                             <Link href={subItem.link ? subItem.link : '/#'} className="nav-link">
@@ -137,10 +135,10 @@ const VerticalLayout = props => {
                             </Link>
                             <Collapse className="menu-dropdown" isOpen={subItem.stateVariables} id="sidebarEcommerce">
                               <ul className="nav nav-sm flex-column">
-                                {/* child subItms  */}
+                                {/* child subItems  */}
                                 {subItem.childItems &&
-                                  (subItem.childItems || []).map((childItem, key) => (
-                                    <React.Fragment key={key}>
+                                  (subItem.childItems || []).map((childItem, childItemKey) => (
+                                    <React.Fragment key={childItemKey}>
                                       {!childItem.childItems ? (
                                         <li className="nav-item">
                                           <Link href={childItem.link ? childItem.link : '/#'} className="nav-link">
@@ -161,8 +159,8 @@ const VerticalLayout = props => {
                                             isOpen={childItem.stateVariables}
                                             id="sidebaremailTemplates">
                                             <ul className="nav nav-sm flex-column">
-                                              {childItem.childItems.map((subChildItem, key) => (
-                                                <li className="nav-item" key={key}>
+                                              {childItem.childItems.map((subChildItem, subChildItemKey) => (
+                                                <li className="nav-item" key={subChildItemKey}>
                                                   <Link
                                                     href={subChildItem.link}
                                                     className="nav-link"
@@ -204,11 +202,6 @@ const VerticalLayout = props => {
       ))}
     </>
   );
-};
-
-VerticalLayout.propTypes = {
-  location: PropTypes.object,
-  t: PropTypes.any,
 };
 
 export default withRouter(withTranslation()(VerticalLayout));
