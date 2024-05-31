@@ -134,7 +134,7 @@ const Admins = () => {
   return (
     <>
       <Head>
-        <title>AIVA | ADMINS</title>
+        <title>WebNova | ADMINS</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <div className="page-content card-animate">

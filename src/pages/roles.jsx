@@ -107,7 +107,7 @@ const Roles = () => {
   return (
     <>
       <Head>
-        <title>AIVA | ROLES</title>
+        <title>WebNova | ROLES</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <div className="page-content card-animate">

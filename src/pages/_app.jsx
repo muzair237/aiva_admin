@@ -8,7 +8,7 @@ import 'animate.css';
 import VerticalLayout from '../layouts';
 import { getCookie } from '../helpers/common';
 import RefectContextProvider from '../contexts/refetchContext';
-import PreLoader from '../components/Atoms/PreLoader';
+import Loader from '@/components/Molecules/Loader';
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();
@@ -29,25 +29,26 @@ export default function App({ Component, pageProps }) {
 
   return (
     <Provider store={store}>
-      {loading ? (
-        <PreLoader />
-      ) : allowedPages ? (
+      {loading && <Loader />}
+      {allowedPages ? (
         <RefectContextProvider>
           <VerticalLayout>
             <Component {...pageProps} />
           </VerticalLayout>
         </RefectContextProvider>
       ) : (
-        <Component {...pageProps} />
+        <>
+          <Component {...pageProps} />
+          <Toaster
+            position="top-center"
+            reverseOrder
+            gutter={8}
+            toastOptions={{
+              duration: 4700,
+            }}
+          />
+        </>
       )}
-      <Toaster
-        position="top-center"
-        reverseOrder
-        gutter={8}
-        toastOptions={{
-          duration: 4700,
-        }}
-      />
     </Provider>
   );
 }

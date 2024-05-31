@@ -29,7 +29,7 @@ const Login = () => {
   return (
     <>
       <Head>
-        <title>AIVA | Login</title>
+        <title>WebNova | Login</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <div className="auth-page-wrapper auth-bg-cover py-4 d-flex justify-content-center align-items-center min-vh-100">
@@ -44,7 +44,7 @@ const Login = () => {
                       <div className="p-lg-5 p-4">
                         <div>
                           <h5 className="text-primary">Welcome Back !</h5>
-                          <p className="text-muted">Sign in to continue to AIVA Admin.</p>
+                          <p className="text-muted">Sign in to continue to WebNova Admin.</p>
                         </div>
                         <div className="mt-4">
                           <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>

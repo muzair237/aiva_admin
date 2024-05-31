@@ -4,9 +4,8 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import Link from 'next/link';
 import Image from 'next/image';
+import webNovaLogoLg from '../../../../public/images/svg/webNovaLogoWhite.svg';
 
-// Import Images
-import logoLight from '../../../../public/images/logo-light.png';
 
 const AuthSlider = () => (
   <>
@@ -16,7 +15,7 @@ const AuthSlider = () => (
         <div className="position-relative h-100 d-flex flex-column">
           <div className="mb-4">
             <Link href="/dashboard" className="d-block">
-              <Image src={logoLight} alt="" height="18" />
+              <Image src={webNovaLogoLg} alt="" height="21" width='140' />
             </Link>
           </div>
           <div className="mt-auto">
