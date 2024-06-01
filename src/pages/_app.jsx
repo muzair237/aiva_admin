@@ -8,7 +8,7 @@ import 'animate.css';
 import VerticalLayout from '../layouts';
 import { getCookie } from '../helpers/common';
 import RefectContextProvider from '../contexts/refetchContext';
-import Loader from '@/components/Molecules/Loader';
+import Loader from '../components/Molecules/Loader';
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();

@@ -6,7 +6,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import webNovaLogoLg from '../../../../public/images/svg/webNovaLogoWhite.svg';
 
-
 const AuthSlider = () => (
   <>
     <Col lg={6}>
@@ -15,7 +14,7 @@ const AuthSlider = () => (
         <div className="position-relative h-100 d-flex flex-column">
           <div className="mb-4">
             <Link href="/dashboard" className="d-block">
-              <Image src={webNovaLogoLg} alt="" height="21" width='140' />
+              <Image src={webNovaLogoLg} alt="" height="21" width="140" />
             </Link>
           </div>
           <div className="mt-auto">
