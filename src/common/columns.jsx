@@ -1,3 +1,6 @@
+// RECENT QUERIES COLUMN(S)
+export const recentQueriesColumns = ['Created At', 'Query', 'Asked By'];
+
 // PERMISSION COLUMN(S)
 export const permissionColumns = ['Created At', 'Can', 'Description', 'Group', 'Actions'];
 

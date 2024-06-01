@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardHeader, Col } from 'reactstrap';
 import ReactEcharts from 'echarts-for-react';
+import { useDispatch, useSelector } from 'react-redux';
+import dashboardThunk from '../../../slices/dashboard/thunk';
 
 const PieChart = () => {
+  const dispatch = useDispatch();
+  const { data } = useSelector(state => state?.Dashboard?.ageGroups);
+
+  useEffect(() => {
+    dispatch(dashboardThunk.getAgeGroups());
+  }, []);
+
   const option = {
     tooltip: {
       trigger: 'item',
@@ -18,31 +27,10 @@ const PieChart = () => {
     // color: chartPieColors,
     series: [
       {
-        name: 'Access From',
+        name: 'Users From',
         type: 'pie',
         radius: '50%',
-        data: [
-          {
-            value: 1048,
-            name: 'Search Engine',
-          },
-          {
-            value: 735,
-            name: 'Direct',
-          },
-          {
-            value: 580,
-            name: 'Email',
-          },
-          {
-            value: 484,
-            name: 'Union Ads',
-          },
-          {
-            value: 300,
-            name: 'Video Ads',
-          },
-        ],
+        data,
         emphasis: {
           itemStyle: {
             shadowBlur: 10,
@@ -52,6 +40,7 @@ const PieChart = () => {
         },
       },
     ],
+
     textStyle: {
       fontFamily: 'Poppins, sans-serif',
     },

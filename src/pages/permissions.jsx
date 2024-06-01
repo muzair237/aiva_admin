@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import Head from 'next/head';
 import { Col, Container, Row, Card, CardHeader, UncontrolledTooltip } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,8 +17,7 @@ import DeleteModal from '../components/Molecules/DeleteModal';
 
 const Permissions = () => {
   const dispatch = useDispatch();
-  const { fetch, refetch } = useContextHook(RefetchContext, v => ({
-    fetch: v.fetch,
+  const { refetch } = useContextHook(RefetchContext, v => ({
     refetch: v.refetch,
   }));
   const hasPermission = useSelector(state => state?.Auth?.hasPermission);
@@ -47,10 +46,6 @@ const Permissions = () => {
   const deletePermission = () => {
     dispatch(permissionThunk.deletePermission({ permissionToDelete, setDeleteModal, refetch }));
   };
-
-  useEffect(() => {
-    dispatch(permissionThunk.getAllPermissions(filters));
-  }, [filters, fetch]);
 
   const actionBtns = _ => (
     <>

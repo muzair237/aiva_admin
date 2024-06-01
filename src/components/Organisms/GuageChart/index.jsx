@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactEcharts from 'echarts-for-react';
 import { Card, CardHeader, Col } from 'reactstrap';
 import { format } from 'date-fns';
+import { useDispatch, useSelector } from 'react-redux';
+import dashboardThunk from '../../../slices/dashboard/thunk';
 
 const GaugeChart = () => {
+  const dispatch = useDispatch();
+  const { todayQueryCount } = useSelector(state => state?.Dashboard?.todayQueryCount);
   const option = {
     tooltip: {
       formatter: '{a} <br/>{b} : {c}%',
@@ -13,7 +17,7 @@ const GaugeChart = () => {
     },
     series: [
       {
-        name: 'Pressure',
+        name: '',
         type: 'gauge',
         progress: {
           show: true,
@@ -31,13 +35,18 @@ const GaugeChart = () => {
             title: {
               color: '#858d98',
             },
-            value: 150,
-            name: 'SCORE',
+            value: todayQueryCount,
+            name: 'Query Count',
           },
         ],
       },
     ],
   };
+
+  useEffect(() => {
+    dispatch(dashboardThunk.getTodayQueryCount());
+  }, []);
+
   return (
     <>
       <Col xl={6}>

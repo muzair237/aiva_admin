@@ -4,6 +4,9 @@ export const LOGOUT = 'logout';
 
 // DASHBOARD ENDPOINT(S)
 export const GET_ALL_DASHBOARD_CARDS = 'get-all-dashboard-cards';
+export const GET_RECENT_QUERIES = 'get-recent-queries';
+export const GET_TODAY_QUERY_COUNT = 'get-today-query-count';
+export const GET_AGE_GROUPS = 'get-age-groups';
 
 // PERMISSIONS ENDPOINT(S)
 export const GET_ALL_PERMISSIONS = 'get-all-permissions';

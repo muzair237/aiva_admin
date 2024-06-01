@@ -1,48 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Col, Card, CardHeader, CardBody } from 'reactstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { format } from 'date-fns';
+import TableContainer from '../../Common/TableContainer';
+import { recentQueriesColumns } from '../../../common/columns';
+import dashboardThunk from '../../../slices/dashboard/thunk';
 
-const RecentQueries = () => (
-  <>
-    <Col xl={12}>
-      <Card>
-        <CardHeader className="align-items-center d-flex">
-          <h4 className="card-title mb-0 flex-grow-1">Recent Queries</h4>
-        </CardHeader>
+const RecentQueries = () => {
+  const dispatch = useDispatch();
+  const isLoading = useSelector(state => state?.Dashboard?.isLoading);
+  const [filters, setFilters] = useState({ page: 1, itemsPerPage: 4 });
+  const recentQueries = useSelector(state => state?.Dashboard?.recentQueries);
 
-        <CardBody>
-          <div className="table-responsive table-card">
-            <table className="table table-borderless table-centered align-middle table-nowrap mb-0">
-              <thead className="text-muted table-light">
-                <tr>
-                  <th scope="col">Created At</th>
-                  <th scope="col">Query</th>
-                  <th scope="col">Asked By</th>
-                </tr>
-              </thead>
-              <tbody>
-                {/* {(recentOrders || []).map((item, key) => ( */}
-                <tr
-                //  key={key}
-                >
-                  <td>
-                    <div className="d-flex align-items-center">
-                      <div className="flex-shrink-0 me-2">
-                        {/* <img src={item.img} alt="" className="avatar-xs rounded-circle" /> */}
-                      </div>
-                      <div className="flex-grow-1">2024-23-23</div>
-                    </div>
-                  </td>
-                  <td>Hello! How are you?</td>
-                  <td>Muhammad Uzair</td>
-                </tr>
-                {/* ))} */}
-              </tbody>
-            </table>
-          </div>
-        </CardBody>
-      </Card>
-    </Col>
-  </>
-);
+  const setSearchQueryCallback = useCallback(newSearchQuery => {
+    setFilters(newSearchQuery);
+  }, []);
+
+  useEffect(() => {
+    dispatch(dashboardThunk.getRecentQueries(filters));
+  }, [filters]);
+
+  const { recentQueries_rows, totalCount } = useMemo(
+    () => ({
+      recentQueries_rows: recentQueries?.items?.map(_ => [
+        format(new Date(_?.createdAt), 'yyyy-MM-dd') || '------------',
+        _?.message || '------------',
+        _?.sender || '------------',
+      ]),
+      totalCount: recentQueries?.totalItems,
+    }),
+    [recentQueries],
+  );
+  return (
+    <>
+      <Col xl={12}>
+        <Card>
+          <CardHeader className="align-items-center d-flex">
+            <h4 className="card-title mb-0 flex-grow-1">Recent Queries</h4>
+          </CardHeader>
+
+          <CardBody>
+            <TableContainer
+              columns={recentQueriesColumns}
+              data={recentQueries_rows || []}
+              isLoading={isLoading}
+              currentPage={filters?.page}
+              totalCount={totalCount}
+              itemsPerPage={filters?.itemsPerPage}
+              setFilters={setSearchQueryCallback}
+            />
+          </CardBody>
+        </Card>
+      </Col>
+    </>
+  );
+};
 
 export default RecentQueries;

@@ -37,34 +37,6 @@ const ProfileDropdown = () => {
             <i className="mdi mdi-account-circle text-muted fs-16 align-middle me-1" />
             <span className="align-middle">Profile</span>
           </DropdownItem>
-          <DropdownItem href={`${process.env.PUBLIC_URL}/apps-chat`}>
-            <i className="mdi mdi-message-text-outline text-muted fs-16 align-middle me-1" />{' '}
-            <span className="align-middle">Messages</span>
-          </DropdownItem>
-          <DropdownItem href={`${process.env.PUBLIC_URL}#`}>
-            <i className="mdi mdi-calendar-check-outline text-muted fs-16 align-middle me-1" />{' '}
-            <span className="align-middle">Taskboard</span>
-          </DropdownItem>
-          <DropdownItem href={`${process.env.PUBLIC_URL}/pages-faqs`}>
-            <i className="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1" />{' '}
-            <span className="align-middle">Help</span>
-          </DropdownItem>
-          <div className="dropdown-divider" />
-          <DropdownItem href={`${process.env.PUBLIC_URL}/pages-profile`}>
-            <i className="mdi mdi-wallet text-muted fs-16 align-middle me-1" />{' '}
-            <span className="align-middle">
-              Balance : <b>$5971.67</b>
-            </span>
-          </DropdownItem>
-          <DropdownItem href={`${process.env.PUBLIC_URL}/pages-profile-settings`}>
-            <span className="badge bg-soft-success text-success mt-1 float-end">New</span>
-            <i className="mdi mdi-cog-outline text-muted fs-16 align-middle me-1" />{' '}
-            <span className="align-middle">Settings</span>
-          </DropdownItem>
-          <DropdownItem href={`${process.env.PUBLIC_URL}/auth-lockscreen-basic`}>
-            <i className="mdi mdi-lock text-muted fs-16 align-middle me-1" />{' '}
-            <span className="align-middle">Lock screen</span>
-          </DropdownItem>
           <DropdownItem onClick={logout}>
             <i className="mdi mdi-logout text-muted fs-16 align-middle me-1" />{' '}
             <span className="align-middle" data-key="t-logout">
