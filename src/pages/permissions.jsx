@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import Head from 'next/head';
 import { Col, Container, Row, Card, CardHeader, UncontrolledTooltip } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,6 +46,10 @@ const Permissions = () => {
   const deletePermission = () => {
     dispatch(permissionThunk.deletePermission({ permissionToDelete, setDeleteModal, refetch }));
   };
+
+  useEffect(() => {
+    dispatch(permissionThunk.getAllPermissions(filters));
+  }, [filters, fetch]);
 
   const actionBtns = _ => (
     <>
