@@ -74,10 +74,7 @@ const Login = () => {
                                 </Button>
                               </div>
                               <div className="text-center">
-                                <p className="mb-0">
-                                  &copy; {new Date().getFullYear()}. Crafted with
-                                  <i className="mdi mdi-heart text-danger" />
-                                </p>
+                                <p className="mb-0">&copy; {new Date().getFullYear()} WebNova, Developed by WebNova</p>
                               </div>
                             </Form>
                           </Formik>
